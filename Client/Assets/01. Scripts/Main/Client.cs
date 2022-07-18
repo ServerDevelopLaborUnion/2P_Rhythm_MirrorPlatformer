@@ -1,6 +1,10 @@
+using System.ComponentModel.Design.Serialization;
+using System.Net.Sockets;
+using System;
 using WebSocketSharp;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Main
 {
@@ -12,6 +16,7 @@ namespace Main
         [SerializeField] string Port = "8080";
         [SerializeField] char prefix = ':';
         private object locker = new object();
+        private Queue<Action> actions = new Queue<Action>();
         public WebSocket server;
 
         public class Packet
@@ -28,14 +33,17 @@ namespace Main
 
         private void Awake()
         {
-            if(Instance == null) Instance = this;
+            DontDestroyOnLoad(transform.root.gameObject);
+            
+            if (Instance == null) Instance = this;
         }
 
         private void Start()
         {
             server = new WebSocket("ws://" + IP + ":" + Port);
 
-            server.OnOpen += (sender, e) => {
+            server.OnOpen += (sender, e) =>
+            {
                 Debug.Log($"client connected on port ${server.Url}");
             };
 
@@ -46,32 +54,39 @@ namespace Main
 
         private void GetMessages(object sender, MessageEventArgs e)
         {
-            lock(locker)
+            lock (locker)
             {
-                if(e.Data.Length == 0 || e.Data == null) return;
-
+                if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                
-                switch(p.Type)
+                actions.Enqueue(() => Debug.Log($"{p.Type}"));
+                switch (p.Type)
                 {
                     case "slide":
-                        P2Control.Instance.SetEvent(P2Control.Events.Slide);
+                        actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
                         break;
                     case "jump":
-                        P2Control.Instance.SetEvent(P2Control.Events.Jump);
+                        actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Jump));
                         break;
                     case "error":
-                        Debug.Log($"{p.Payload}");
+                        actions.Enqueue(() => Debug.Log($"{p.Payload}"));
                         break;
                 }
+            }
+        }
+
+        private void Update()
+        {
+            while (actions.Count > 0)
+            {
+                actions.Dequeue();
             }
         }
 
         public void SendMessages(string type, string payload)
         {
             Packet packet = new Packet(type, payload);
-            string JSON =  JsonConvert.SerializeObject(packet);
-            server.Send(JsonUtility.ToJson(JSON));
+            string JSON = JsonConvert.SerializeObject(packet);
+            server.Send(JSON);
         }
 
         private void OnApplicationQuit()

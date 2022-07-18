@@ -1,5 +1,4 @@
 using UnityEngine;
-using Core;
 
 namespace Main
 {
@@ -15,7 +14,9 @@ namespace Main
         private void FixedUpdate()
         {
             if (Input.GetKeyDown(KeyCode.Space))
-                jump.DoJump(() => Client.Instance.SendMessages("jump", "") );
+                jump.DoJump(() => {
+                    Client.Instance.SendMessages("jump", "");
+                });
         }
     }
 }
