@@ -1,0 +1,15 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/*.meta": true,
+        "Client\\Assets/02. Sprites": true,
+        "Client\\Assets/03. Prefabs": true,
+        "Client\\Assets/04. Animations": true
+    },
+    "explorerExclude.backup": null
+}
