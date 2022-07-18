@@ -1,42 +1,45 @@
 const ws = require('ws');
-const wss = new ws.Server({ port: 3000 });
+const wss = new ws.Server({port:3000});
 let idcnt = 0;
 
-wss.on('listening', () => {
+wss.on('connection', () => {
   console.log(`server opened on port ${wss.options.port}`);
 });
 
-wss.on('connection', (socket) => {
-  socket.id = idcnt;
+wss.on('connection', (socket, req) => {
+  socket.id = idcnt++;
   socket.on('message', (msg) => {
     const data = JSON.parse(msg);
-    if(data?.err) return;
-    switch (data?.locate) {
-      case 'room':
-        roomData(data, socket);
+    console.log(data.payload);
+    var result = {
+      type : null,
+      payload : null
+    };
+    switch(data.type) {
+      case 'jump':
+        result.type = 'jump';
+        result.payload = 'this is JumpData';
+        wss.clients.forEach(soc => {
+          if(soc.id != socket.id)
+            soc.send(JSON.stringify(result));
+        });
         break;
-      case 'game':
-        gameData(data, socket);
+      case 'slide':
+        result.type = 'slide';
+        result.payload = 'this is SlideData';
+        wss.clients.forEach(soc => {
+          if(soc.id != socket.id)
+            soc.send(JSON.stringify(result));
+        });
+        break;
+      case 'error':
+        result.type = 'error';
+        result.payload = 'throw error on other';
+        wss.clients.forEach(soc => {
+          if(soc.id != socket.id)
+            soc.send(JSON.stringify(result));
+        });
         break;
     }
   });
 });
-
-/**
- * @param {string} type the type of data
- * @param {Object} data Message changed to JavaScript Object
- * @param {ws.WebSocket} socket WebSocket which send message
- */
-function roomData(data, socket) {
-  switch(data.type) {
-
-  }
-}
-
-function gameData(data, socket) {
-  switch(data.type) {
-    case 'value':
-      console.log(data.value);
-      break;
-  }
-}
