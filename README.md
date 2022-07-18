@@ -1,4 +1,4 @@
-# 서노 1학년 산출물 아이디어 회의
+# 2P_Rhythm_MirrorPlatformer
 
 ## 게임 개요
 
