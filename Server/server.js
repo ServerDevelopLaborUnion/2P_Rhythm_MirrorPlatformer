@@ -2,7 +2,7 @@ const ws = require('ws');
 const wss = new ws.Server({ port: 3000 });
 let idcnt = 0;
 
-wss.on('connection', () => {
+wss.on('listening', () => {
   console.log(`server opened on port ${wss.options.port}`);
 });
 
@@ -16,6 +16,12 @@ wss.on('connection', (socket, req) => {
       payload: null
     };
     switch (data.type) {
+      case 'loadScene':
+        result.type = data.type;
+        result.payload = "Load Scene";
+        wss.clients.forEach(soc => {
+          soc.send(JSON.stringify(result));
+        });
       case 'jump':
         result.type = 'jump';
         result.payload = 'this is JumpData';
