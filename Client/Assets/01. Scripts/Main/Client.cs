@@ -1,5 +1,3 @@
-using System.ComponentModel.Design.Serialization;
-using System.Net.Sockets;
 using System;
 using WebSocketSharp;
 using UnityEngine;
@@ -34,7 +32,7 @@ namespace Main
         private void Awake()
         {
             DontDestroyOnLoad(transform.root.gameObject);
-            
+
             if (Instance == null) Instance = this;
         }
 
@@ -61,6 +59,12 @@ namespace Main
                 actions.Enqueue(() => Debug.Log($"{p.Type}"));
                 switch (p.Type)
                 {
+                    case "loadScene":
+                        actions.Enqueue(() => Test.Instance.Load());
+                        break;
+                    case "unLoadScene":
+                        actions.Enqueue(() => Test.Instance.UnLoad());
+                        break;
                     case "slide":
                         actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
                         break;
@@ -78,7 +82,8 @@ namespace Main
         {
             while (actions.Count > 0)
             {
-                actions.Dequeue();
+                Debug.Log($"Action gonna be dequeuing");
+                actions.Dequeue()?.Invoke();
             }
         }
 

@@ -15,7 +15,7 @@ namespace Main
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 jump.DoJump(() => {
-                    Client.Instance.SendMessages("jump", "");
+                    Client.Instance.SendMessages("jump", "lets do jumping");
                 });
         }
     }

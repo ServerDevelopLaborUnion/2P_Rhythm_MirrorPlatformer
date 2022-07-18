@@ -22,6 +22,14 @@ wss.on('connection', (socket, req) => {
         wss.clients.forEach(soc => {
           soc.send(JSON.stringify(result));
         });
+        break;
+      case 'unLoadScene':
+        result.type = data.type;
+        result.payload = "unload Scene";
+        wss.clients.forEach(soc => {
+          soc.send(JSON.stringify(result));
+        });
+        break;
       case 'jump':
         result.type = 'jump';
         result.payload = 'this is JumpData';
