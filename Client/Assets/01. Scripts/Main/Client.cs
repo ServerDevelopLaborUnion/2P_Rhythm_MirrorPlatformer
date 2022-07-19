@@ -12,20 +12,35 @@ namespace Main
 
         [SerializeField] string IP = "127.0.0.1";
         [SerializeField] string Port = "8080";
-        [SerializeField] char prefix = ':';
         private object locker = new object();
         private Queue<Action> actions = new Queue<Action>();
         public WebSocket server;
 
         public class Packet
         {
-            [JsonProperty("type")] public string Type;
-            [JsonProperty("payload")] public string Payload;
+            [JsonProperty("l")] public string Locate;
+            [JsonProperty("")] public string Payload;
+            [JsonProperty("v")] public string Value;
 
-            public Packet(string type, string payload)
+            public Packet(string locate, string payload, string value)
             {
-                Type = type;
+                Locate = locate;
                 Payload = payload;
+                Value = value;
+            }
+        }
+
+        public class Lobby
+        {
+            [JsonProperty("n")] public string Name;
+            [JsonProperty("i")] public string ID;
+            [JsonProperty("p")] public string PassWord;
+
+            public Lobby(string name, string id, string passWord)
+            {
+                Name = name;
+                ID = id;
+                PassWord = passWord;
             }
         }
 
@@ -56,25 +71,43 @@ namespace Main
             {
                 if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                actions.Enqueue(() => Debug.Log($"{p.Type}"));
-                switch (p.Type)
+                actions.Enqueue(() => Debug.Log($"{p.Locate}"));
+                switch (p.Locate)
                 {
-                    case "loadScene":
-                        actions.Enqueue(() => Test.Instance.Load());
+                    case "game":
+                        actions.Enqueue(() => GameData(p.Value) );
                         break;
-                    case "unLoadScene":
-                        actions.Enqueue(() => Test.Instance.UnLoad());
-                        break;
-                    case "slide":
-                        actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
-                        break;
-                    case "jump":
-                        actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Jump));
+                    case "room":
+                        actions.Enqueue(() => RoomData(p.Value) );
                         break;
                     case "error":
                         actions.Enqueue(() => Debug.Log($"{p.Payload}"));
                         break;
                 }
+            }
+        }
+
+        private void RoomData(string value)
+        {
+            
+        }
+
+        private void GameData(string value)
+        {
+            switch (value)
+            {
+                case "loadScene":
+                    actions.Enqueue(() => Test.Instance.Load());
+                    break;
+                case "unLoadScene":
+                    actions.Enqueue(() => Test.Instance.UnLoad());
+                    break;
+                case "slide":
+                    actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
+                    break;
+                case "jump":
+                    actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Jump));
+                    break;
             }
         }
 
@@ -87,9 +120,9 @@ namespace Main
             }
         }
 
-        public void SendMessages(string type, string payload)
+        public void SendMessages(string locate, string payload, string value)
         {
-            Packet packet = new Packet(type, payload);
+            Packet packet = new Packet(locate, payload, value);
             string JSON = JsonConvert.SerializeObject(packet);
             server.Send(JSON);
         }

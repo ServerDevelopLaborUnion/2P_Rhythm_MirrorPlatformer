@@ -13,12 +13,14 @@ namespace Main
             if(Instance == null) Instance = this;
         }
 
-        private void Update()
+        public void LoadMessage()
         {
-            if(Input.GetKeyDown(KeyCode.A))
-                Client.Instance.SendMessages("loadScene", "loadScene");
-            if(Input.GetKeyDown(KeyCode.S))
-                Client.Instance.SendMessages("unLoadScene", "unLoadScene");
+            Client.Instance.SendMessages("loadScene", "loadScene", "loadScene");
+        }
+
+        public void UnloadMessage()
+        {
+            Client.Instance.SendMessages("unLoadScene", "unLoadScene", "loadScene");
         }
 
         public void Load()
