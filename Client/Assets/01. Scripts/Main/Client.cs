@@ -19,13 +19,13 @@ namespace Main
         public class Packet
         {
             [JsonProperty("l")] public string Locate;
-            [JsonProperty("")] public string Payload;
+            [JsonProperty("t")] public string Type;
             [JsonProperty("v")] public string Value;
 
-            public Packet(string locate, string payload, string value)
+            public Packet(string locate, string type, string value)
             {
                 Locate = locate;
-                Payload = payload;
+                Type = type;
                 Value = value;
             }
         }
@@ -75,26 +75,48 @@ namespace Main
                 switch (p.Locate)
                 {
                     case "game":
-                        actions.Enqueue(() => GameData(p.Value) );
+                        actions.Enqueue(() => GameData(p) );
                         break;
                     case "room":
-                        actions.Enqueue(() => RoomData(p.Value) );
+                        actions.Enqueue(() => RoomData(p) );
                         break;
                     case "error":
-                        actions.Enqueue(() => Debug.Log($"{p.Payload}"));
+                        actions.Enqueue(() => Debug.Log($"{p.Locate}"));
                         break;
                 }
             }
         }
-
-        private void RoomData(string value)
+#region 룸
+        private void RoomData(Packet p)
         {
-            
+            switch(p.Type)
+            {
+                case "error":
+                    actions.Enqueue(() => Debug.Log($"{p.Type}") );
+                    break;
+            }
+        }
+#endregion
+#region 인게임
+        private void GameData(Packet p)
+        {
+            switch (p.Type)
+            {
+                case "input":
+                    actions.Enqueue(() => InputData(p));
+                    break;
+                case "system":
+                    actions.Enqueue(() => SystemData(p));
+                    break;
+                case "error":
+                    actions.Enqueue(() => Debug.Log($"{p.Type}") );
+                    break;
+            }
         }
 
-        private void GameData(string value)
+        private void SystemData(Packet p)
         {
-            switch (value)
+            switch (p.Value)
             {
                 case "loadScene":
                     actions.Enqueue(() => Test.Instance.Load());
@@ -102,15 +124,29 @@ namespace Main
                 case "unLoadScene":
                     actions.Enqueue(() => Test.Instance.UnLoad());
                     break;
+                case "error":
+                    actions.Enqueue(() => Debug.Log($"{p.Value}") );
+                    break;
+            }
+        }
+
+        private void InputData(Packet p)
+        {
+            switch (p.Value)
+            {
+
                 case "slide":
                     actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
                     break;
                 case "jump":
                     actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Jump));
                     break;
+                case "error":
+                    actions.Enqueue(() => Debug.Log($"{p.Value}") );
+                    break;
             }
         }
-
+#endregion
         private void Update()
         {
             while (actions.Count > 0)

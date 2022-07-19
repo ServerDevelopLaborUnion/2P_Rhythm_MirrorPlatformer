@@ -15,12 +15,12 @@ namespace Main
 
         public void LoadMessage()
         {
-            Client.Instance.SendMessages("loadScene", "loadScene", "loadScene");
+            Client.Instance.SendMessages("game", "system", "loadScene");
         }
 
         public void UnloadMessage()
         {
-            Client.Instance.SendMessages("unLoadScene", "unLoadScene", "loadScene");
+            Client.Instance.SendMessages("game", "system", "unLoadScene");
         }
 
         public void Load()
