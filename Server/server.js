@@ -2,7 +2,7 @@ const ws = require('ws');
 const wss = new ws.Server({ port: 3000 });
 
 let idcnt = 0;
-var roomList = new Array();
+var roomList = new Array(Room);
 
 wss.on('listening', () => {
   console.log(`server opened on port ${wss.options.port}`);
@@ -53,15 +53,30 @@ function GameData(data, socket) {
 function RoomData(data, socket) {
   var result = {
     l : 'room',
-    t : null,
+    t : data.t,
     v : null
   }
-  var dataToSocket = {};
-  var dataToUsers = {};
   switch(data.t) {
     case 'make':
+      roomList.push(new Room(data.n, data.i));
+      var socData = {...result};
+      var usersData = {...result};
+      socData.t = 's';
+      usersData.t = 'make';
+      roomList.forEach(room => {
+        if(room.hostID == socket.id) {
+          
+          socData.v = room.roomInfo;
+          usersData.v = room.roomInfo;
+          socket.send(JSON.stringify(socData));
+          
+        }
+      });
       break;
     case 'join':
+      roomList.forEach(room => {
+        if()
+      })
       break;
   }
 }
@@ -74,7 +89,7 @@ class Room {
   constructor(name, id) {
     this.name = name
     this.hostID = id;
-    this.userList = [];
+    this.userList = new Array(ws.WebSocket);
     this.roomInfo = {
       n : this.name,
       i : this.hostID
