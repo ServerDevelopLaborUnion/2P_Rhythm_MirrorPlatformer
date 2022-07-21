@@ -30,17 +30,15 @@ namespace Main
             }
         }
 
-        public class Lobby
+        public class RoomPacket
         {
             [JsonProperty("n")] public string Name;
             [JsonProperty("i")] public string ID;
-            [JsonProperty("p")] public string PassWord;
 
-            public Lobby(string name, string id, string passWord)
+            public RoomPacket(string name, string id)
             {
                 Name = name;
                 ID = id;
-                PassWord = passWord;
             }
         }
 
@@ -89,8 +87,13 @@ namespace Main
 #region 룸
         private void RoomData(Packet p)
         {
+            RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
+            
             switch(p.Type)
             {
+                case "create":
+                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(rp.ID, rp.Name) );
+                    break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
                     break;
