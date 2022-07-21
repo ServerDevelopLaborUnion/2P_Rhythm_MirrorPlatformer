@@ -47,11 +47,22 @@ function GameData(data, socket) {
 }
 
 /**
- * @param {} 
+ * @param {object} data
+ * @param {ws.WebSocket} socket 
  */
-function RoomData() {
+function RoomData(data, socket) {
   var result = {
-
+    l : 'room',
+    t : null,
+    v : null
+  }
+  var dataToSocket = {};
+  var dataToUsers = {};
+  switch(data.t) {
+    case 'make':
+      break;
+    case 'join':
+      break;
   }
 }
 
