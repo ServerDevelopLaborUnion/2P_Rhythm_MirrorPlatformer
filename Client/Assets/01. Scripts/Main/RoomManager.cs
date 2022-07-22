@@ -13,6 +13,8 @@ namespace Main
         private void Awake()
         {
             if(Instance == null) Instance = this;
+            if(Instance != null) { Debug.Log($"Multiple RoomManager Instance is Running, Destroy This"); Destroy(gameObject); }
+            DontDestroyOnLoad(transform.root.gameObject);
 
             canvas = GameObject.Find("Canvas").transform;
         }

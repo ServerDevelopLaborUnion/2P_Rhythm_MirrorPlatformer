@@ -11,6 +11,8 @@ namespace Main
         private void Awake()
         {
             if(Instance == null) Instance = this;
+            if(Instance != null) { Debug.Log($"Multiple Test Instance is Running, Destroy This"); Destroy(gameObject); }
+            DontDestroyOnLoad(transform.root.gameObject);
         }
 
         public void LoadMessage()

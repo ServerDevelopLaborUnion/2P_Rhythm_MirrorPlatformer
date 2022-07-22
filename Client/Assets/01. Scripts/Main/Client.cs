@@ -44,9 +44,9 @@ namespace Main
 
         private void Awake()
         {
-            DontDestroyOnLoad(transform.root.gameObject);
-
             if (Instance == null) Instance = this;
+            if(Instance != null) { Debug.Log($"Multiple Client Instance is Running, Destroy This"); Destroy(gameObject); }
+            DontDestroyOnLoad(transform.root.gameObject);
         }
 
         private void Start()
@@ -159,9 +159,9 @@ namespace Main
             }
         }
 
-        public void SendMessages(string locate, string payload, string value)
+        public void SendMessages(string locate, string type, string value)
         {
-            Packet packet = new Packet(locate, payload, value);
+            Packet packet = new Packet(locate, type, value);
             string JSON = JsonConvert.SerializeObject(packet);
             server.Send(JSON);
         }
