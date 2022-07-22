@@ -1,118 +1,101 @@
 const ws = require('ws');
-const wss = new ws.Server({ port: 3000 });
+const wsServer = new ws.Server({port: 3000});
 
 let idcnt = 0;
-var roomList = new Array();
+var gameList = {};
 
-wss.on('listening', () => {
-  console.log(`server opened on port ${wss.options.port}`);
+wsServer.on('listening', () => {
+  console.log(`server opened on port ${wsServer.options.port}`);
 });
 
-wss.on('connection', (socket, req) => {
-  socket.id = idcnt++;
-  socket.on('message', (msg) => {
-    const data = JSON.parse(msg);
-    switch(data.l) {
-      case 'game':
-        GameData(data, socket);
+wsServer.on('connection', (client, req) => {
+  client.id = idcnt++;
+  client.on('message', (msg) => {
+    const Data = JSONCheck(msg.toString());
+    if(Data == null) return;
+    switch(Data.l) {
+      case 'lobby':
+        LobbyData(Data, client);
         break;
-      case 'error':
-        return;
+      case 'game':
+        GameData(Data, client);
+        break;
     }
   });
 });
 
 /**
- * 
  * @param {object} data 
  * @param {ws.WebSocket} socket 
  */
-function GameData(data, socket) {
-  var result = {
-    l : 'game',
-    t : data.t,
-    v : data.v
-  };
-  var stringData = JSON.stringify(result);
-  switch(data.t) {
-    case 'input':
-      BroadCast(false, stringData, socket);
-      break;
-    case 'system':
-      BroadCast(true, stringData, socket);
-      break;
-    // case 'error':
-    //   break;
-  }
-}
-
-/**
- * @param {object} data
- * @param {ws.WebSocket} socket 
- */
-function RoomData(data, socket) {
-  var result = {
-    l : 'room',
-    t : null,
-    v : null
-  }
-  var dataToSocket = {};
-  var dataToUsers = {};
+const LobbyData = function(data, socket) {
   switch(data.t) {
     case 'make':
+      gameList[data.v] = [].push(socket);
+      socket.game = data.v;
+      socket.send(JSON.stringify({
+        l : "lobby", t : "make", v : true
+      }));
+      wsServer.clients.forEach(client => {
+        if(client.id != socket.id) client.send(JSON.stringify({
+          l : "lobby", t : "make", v : data.v
+        }));
+      });
       break;
     case 'join':
+      try {
+        gameList[data.v].forEach(client => {
+          client.send(JSON.stringify({
+            l : "lobby", t : "join", v : data.v
+          }));
+        });
+        socket.game = data.v
+        gameList[data.v].push(socket);
+        socket.send(JSON.stringify({
+          l : "lobby", t : "join", v: true
+        }));
+      }
+      catch(err) {
+        socket.send(JSON.stringify({
+          l : "lobby", t : "join", v : false
+        }));
+      }
+      break;
+    case 'start':
+      // 대충 씬을 넘기라는 거를 보내는 코드
       break;
   }
-}
-
-class Room {
-  /**
-   * @param {string} name 
-   * @param {Int16Array} id
-   */
-  constructor(name, id) {
-    this.name = name
-    this.hostID = id;
-    this.userList = [];
-    this.roomInfo = {
-      n : this.name,
-      i : this.hostID
-    }
-  }
-  
-  /**
-   * @param {ws.WebSocket} socket 
-   */
-  addMember(socket) {
-    if(this.userList.length >= 2)
-      socket.send(JSON.stringify({
-        l : 'room',
-        t : 'error',
-        v : 'overflow member'
-      }));
-    this.userList.push(socket.id);
-  }
-  rmMember(socket) {
-    
-  }
-
 }
 
 /**
- * @param {boolean} sendSelf 
- * @param {string} data 
- * @param {ws.WebSocket} socket
+ * @param {object} data 
+ * @param {ws.WebSocket} socket 
  */
-function BroadCast(sendSelf, data, socket) {
-  if(sendSelf) {
-    wss.clients.forEach(socket => {
-      socket.send(data);
-    });
+const GameData = function(data, socket) {
+  var result = {
+    l : "game", t : data.t, v : data.v
   }
-  else {
-    wss.clients.forEach(soc => {
-      if(soc.id != socket.id) soc.send(data);
-    });
+  switch(data.t) {
+    case 'input':
+      gameList[socket.game].forEach(client => {
+        if(client.id != socket.id) {
+          client.send(JSON.stringify(result));
+        }
+      });
+      break;
+    case 'system':
+      gameList[socket.game].forEach(client => {
+        client.send(JSON.stringify(result));
+      });
+      break;
+  }
+}
+
+const JSONCheck = function(stringData) {
+  try {
+    return JSON.parse(stringData);
+  }
+  catch(error) {
+    return false;
   }
 }
