@@ -44,9 +44,9 @@ namespace Main
 
         private void Awake()
         {
-            if (Instance == null) Instance = this;
             if(Instance != null) { Debug.Log($"Multiple Client Instance is Running, Destroy This"); Destroy(gameObject); }
-            DontDestroyOnLoad(transform.root.gameObject);
+            if (Instance == null) Instance = this;
+            //DontDestroyOnLoad(transform.root.gameObject);
         }
 
         private void Start()
@@ -92,7 +92,7 @@ namespace Main
             switch(p.Type)
             {
                 case "create":
-                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(rp.ID, rp.Name) );
+                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(rp.Name) );
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
@@ -161,6 +161,8 @@ namespace Main
 
         public void SendMessages(string locate, string type, string value)
         {
+            if(!server.IsAlive) { Debug.Log($"Server is Not Connected"); return; }
+
             Packet packet = new Packet(locate, type, value);
             string JSON = JsonConvert.SerializeObject(packet);
             server.Send(JSON);

@@ -1,8 +1,9 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using Core;
 
-public class Rotate : MonoBehaviour
+public class Rotate : Buttons
 {
     [SerializeField] float duration;
     [SerializeField] RectTransform rt;
@@ -12,19 +13,19 @@ public class Rotate : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetButtonDown("Jump")) DoRotateLeft();
+        if (Input.GetButtonDown("Jump")) DoRotateLeft();
     }
 
-    private void DoRotateLeft()
+    public void DoRotateLeft()
     {
-        if(onMoving) return;
+        if (onMoving) return;
         Sequence seq = DOTween.Sequence();
 
-        if(currentPanel == 4) currentPanel = 0;
-        
+        if (currentPanel == 4) currentPanel = 0;
+
         currentPanel++;
 
-        switch(currentPanel)
+        switch (currentPanel)
         {
             case 1:
                 DoRotate(rts[0], rts[1]);
@@ -44,23 +45,34 @@ public class Rotate : MonoBehaviour
         seq.Append(rt
             .DORotate(transform.eulerAngles + new Vector3(0, 90, 0), duration))
             .SetEase(Ease.Linear)
-            .OnComplete(() => onMoving = false );
+            .OnComplete(() => onMoving = false);
+
+        Reset();
     }
 
     private void DoRotate(RectTransform current, RectTransform next)
     {
-        foreach(RectTransform rt in rts)
-        {
-            Debug.Log($"{Mathf.Floor(rt.eulerAngles.y)}");
-            if(Mathf.Floor(rt.eulerAngles.y) == 0) {rt.DOLocalMoveX(960, duration); rt.transform.SetSiblingIndex(0);}
-            if(Mathf.Floor(rt.eulerAngles.y) == 90) {rt.DOLocalMoveX(0, duration); rt.transform.SetSiblingIndex(1);}
-            if(Mathf.Floor(rt.eulerAngles.y) == 180) {rt.DOLocalMoveX(-960, duration); rt.transform.SetSiblingIndex(2);}
-            if(Mathf.Floor(rt.eulerAngles.y) == 270) {rt.DOLocalMoveX(0, duration); rt.transform.SetSiblingIndex(3);}
-        }
-
+        foreach (RectTransform rt in rts)
+            switch (Mathf.Floor(rt.eulerAngles.y))
+            {
+                case 0:
+                    rt.DOLocalMoveX(960, duration);
+                    rt.transform.SetSiblingIndex(0);
+                    break;
+                case 90:
+                    rt.DOLocalMoveX(0, duration);
+                    rt.transform.SetSiblingIndex(1);
+                    break;
+                case 180:
+                    rt.DOLocalMoveX(-960, duration);
+                    rt.transform.SetSiblingIndex(2);
+                    break;
+                case 270:
+                    rt.DOLocalMoveX(0, duration);
+                    rt.transform.SetSiblingIndex(3);
+                    break;
+            }
         current.DOScale(new Vector3(0.3f, 0.3f), duration / 2);
         next.DOScale(Vector3.one, duration / 2);
-        //current.localScale = new Vector3(0.3f, 0.3f);
-        //next.localScale = Vector3.one;
     }
 }

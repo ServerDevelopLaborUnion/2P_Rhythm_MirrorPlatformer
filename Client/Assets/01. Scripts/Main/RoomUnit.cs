@@ -1,5 +1,5 @@
 using Core;
-using UnityEngine;
+using Newtonsoft.Json;
 using UnityEngine.UI;
 using TMPro;
 
@@ -22,11 +22,15 @@ namespace Main
         {
             id = ID;
             roomName = RoomName;
+            infoText.SetText($"HOST ID : {id} \nNAME : {roomName}");
         }
 
         public void EnterRoom()
         {
-            Client.Instance.SendMessages("room", "join", id + "," + roomName);
+            Client.RoomPacket rp = new Client.RoomPacket(roomName, "자기 id");
+            string data = JsonConvert.SerializeObject(rp);
+
+            Client.Instance.SendMessages("room", "join", data);
         }
 
         public override void Reset()
