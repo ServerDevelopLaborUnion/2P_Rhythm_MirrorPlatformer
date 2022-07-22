@@ -1,91 +1,84 @@
 const ws = require('ws');
-const wsServer = new ws.Server({port : 3000});
+const wsServer = new ws.Server({port: 3000});
 
 let idcnt = 0;
-var form = { l : null, t : null, v : null};
-var roomList = [];
+var gameList = {};
 
 wsServer.on('listening', () => {
-  console.log(`server opened on port ${wss.options.port}`);
+  console.log(`server opened on port ${wsServer.options.port}`);
 });
 
 wsServer.on('connection', (client, req) => {
   client.id = idcnt++;
   client.on('message', (msg) => {
-    const Data = checkJSON(msg.toString());
-    if(Data == false) return;
+    const Data = JSONCheck(msg.toString());
+    if(Data == null) return;
     switch(Data.l) {
-      case 'game':
+      case 'lobby':
+        LobbyData(Data, client);
         break;
-      case 'room':
-        RoomData(client, Data);
+      case 'game':
+        GameData(Data, client);
         break;
     }
   });
 });
 
 /**
- * @param {ws.WebSocket} socket 
  * @param {object} data 
- */
-const GameData = function(socket, data) {
-  
-}
-
-/**
  * @param {ws.WebSocket} socket 
- * @param {object} data 
  */
-const RoomData = function(socket, data) {
+const LobbyData = function(data, socket) {
   switch(data.t) {
     case 'make':
-      roomList.push(new Room(data.v.n, socket.id));
+      gameList[data.v] = [].push(socket);
+      socket.send(JSON.stringify({
+        l : "lobby", t : "make", v : true
+      }));
+      wsServer.clients.forEach(client => {
+        if(client.id != socket.id) client.send(JSON.stringify({
+          l : "lobby", t : "make", v : data.v
+        }));
+      });
       break;
     case 'join':
-      break;
-  }
-}
-
-class Room {
-  /**
-   * @param {string} n 
-   * @param {Int16Array} i 
-   */
-  constructor(n, i) {
-    this.name = n;
-    this.hostID = i;
-    this.roomInfo = { 
-      l : 'room', t : 'make', 
-      v : { n : this.name, i : this.hostID }
-    };
-    wsServer.clients.forEach(user => {
-      if(user.id == this.hostID) {
-        user.send(JSON.stringify({
-          l : 'room', t : 'make', v : true
+      try {
+        gameList[data.v].forEach(client => {
+          client.send(JSON.stringify({
+            l : "lobby", t : "join", v : data.v
+          }));
+        });
+        gameList[data.v].push(socket.id);
+      }
+      catch(err) {
+        socket.send(JSON.stringify({
+          l : "lobby", t : "join", v : false
         }));
       }
-      else {
-        user.send(JSON.stringify(this.roomInfo));
-      }
-    });
-  }
-  addUser(socket) {
-    this.otherID = socket.id;
-  }
-  removeUser(socket) {
-    this.otherID = null;
+      break;
+    case 'start':
+      break;
   }
 }
 
 /**
- * @param {string} jsonData
- * @param {object} ParsedData
+ * @param {object} data 
+ * @param {ws.WebSocket} socket 
  */
-const checkJSON = (jsonData) => {
-  try {
-    return JSON.parse(jsonData);
+const GameData = function(data, socket) {
+  switch(data.t) {
+    case 'input':
+      break;
+    case 'system':
+      break;
   }
-  catch {
+}
+
+const JSONCheck = function(stringData) {
+  try {
+    return JSON.parse(stringData);
+  }
+  catch(error) {
     return false;
   }
 }

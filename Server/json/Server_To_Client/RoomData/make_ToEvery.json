@@ -2,7 +2,6 @@
     "l" : "room",
     "t" : "make",
     "v" : {
-        "n" : "test",
-        "i" : 6
+        "n" : "TestRoom"
     }
 }
