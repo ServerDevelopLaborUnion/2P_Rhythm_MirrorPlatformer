@@ -15,10 +15,7 @@ namespace Main
 
         public void RequestCreate()
         {
-            Client.RoomPacket rp = new Client.RoomPacket(field.text, "자기 id");
-            string data = JsonConvert.SerializeObject(rp);
-
-            Client.Instance.SendMessages("room", "create", data);
+            Client.Instance.SendMessages("room", "create", field.text);
         }
     }
 }

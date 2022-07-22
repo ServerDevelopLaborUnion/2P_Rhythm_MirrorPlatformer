@@ -18,19 +18,15 @@ namespace Main
             infoText = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        public void Init(string ID, string RoomName)
+        public void Init(string RoomName)
         {
-            id = ID;
             roomName = RoomName;
-            infoText.SetText($"HOST ID : {id} \nNAME : {roomName}");
+            infoText.SetText($"NAME : {roomName}");
         }
 
         public void EnterRoom()
         {
-            Client.RoomPacket rp = new Client.RoomPacket(roomName, "자기 id");
-            string data = JsonConvert.SerializeObject(rp);
-
-            Client.Instance.SendMessages("room", "join", data);
+            Client.Instance.SendMessages("room", "join", roomName);
         }
 
         public override void Reset()

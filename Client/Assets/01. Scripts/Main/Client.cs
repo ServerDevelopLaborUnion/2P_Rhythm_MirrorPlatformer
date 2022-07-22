@@ -14,7 +14,6 @@ namespace Main
         [SerializeField] string Port = "8080";
         private object locker = new object();
         private Queue<Action> actions = new Queue<Action>();
-        public int id = 0;
         public WebSocket server;
 
         public class Packet
@@ -34,12 +33,10 @@ namespace Main
         public class RoomPacket
         {
             [JsonProperty("n")] public string Name;
-            [JsonProperty("i")] public string ID;
 
-            public RoomPacket(string name, string id)
+            public RoomPacket(string name)
             {
                 Name = name;
-                ID = id;
             }
         }
 

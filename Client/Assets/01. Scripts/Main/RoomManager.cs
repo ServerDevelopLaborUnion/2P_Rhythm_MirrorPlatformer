@@ -24,7 +24,7 @@ namespace Main
         public void CreateRoom(string RoomName)
         {
             RoomUnit temp = PoolManager.Instance.Pop(roomUnit) as RoomUnit;
-            temp.Init("asd", RoomName);
+            temp.Init(RoomName);
             temp.transform.SetParent(content);
             temp.transform.localScale = Vector3.one;
         }
