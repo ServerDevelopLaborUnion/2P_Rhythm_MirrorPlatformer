@@ -14,6 +14,7 @@ namespace Main
         [SerializeField] string Port = "8080";
         private object locker = new object();
         private Queue<Action> actions = new Queue<Action>();
+        public int id = 0;
         public WebSocket server;
 
         public class Packet

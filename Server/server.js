@@ -14,7 +14,7 @@ wsServer.on('connection', (client, req) => {
     const Data = JSONCheck(msg.toString());
     if(Data == null) return;
     switch(Data.l) {
-      case 'lobby':
+      case 'room':
         LobbyData(Data, client);
         break;
       case 'game':
@@ -30,15 +30,15 @@ wsServer.on('connection', (client, req) => {
  */
 const LobbyData = function(data, socket) {
   switch(data.t) {
-    case 'make':
+    case 'create':
       gameList[data.v] = [].push(socket);
       socket.game = data.v;
       socket.send(JSON.stringify({
-        l : "lobby", t : "make", v : true
+        l : "room", t : "create", v : true
       }));
       wsServer.clients.forEach(client => {
         if(client.id != socket.id) client.send(JSON.stringify({
-          l : "lobby", t : "make", v : data.v
+          l : "room", t : "create", v : data.v
         }));
       });
       break;
@@ -46,18 +46,18 @@ const LobbyData = function(data, socket) {
       try {
         gameList[data.v].forEach(client => {
           client.send(JSON.stringify({
-            l : "lobby", t : "join", v : data.v
+            l : "room", t : "join", v : data.v
           }));
         });
         socket.game = data.v
         gameList[data.v].push(socket);
         socket.send(JSON.stringify({
-          l : "lobby", t : "join", v: true
+          l : "room", t : "join", v: true
         }));
       }
       catch(err) {
         socket.send(JSON.stringify({
-          l : "lobby", t : "join", v : false
+          l : "room", t : "join", v : false
         }));
       }
       break;
