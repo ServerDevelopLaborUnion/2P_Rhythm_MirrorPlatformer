@@ -1,7 +1,5 @@
 {
-    "l" : "room",
+    "l" : "lobby",
     "t" : "make",
-    "v" : {
-        "n" : "TestRoom"
-    }
+    "v" : "TestRoom"
 }

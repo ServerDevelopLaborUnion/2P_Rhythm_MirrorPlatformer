@@ -32,6 +32,7 @@ const LobbyData = function(data, socket) {
   switch(data.t) {
     case 'make':
       gameList[data.v] = [].push(socket);
+      socket.game = data.v;
       socket.send(JSON.stringify({
         l : "lobby", t : "make", v : true
       }));
@@ -48,7 +49,11 @@ const LobbyData = function(data, socket) {
             l : "lobby", t : "join", v : data.v
           }));
         });
-        gameList[data.v].push(socket.id);
+        socket.game = data.v
+        gameList[data.v].push(socket);
+        socket.send(JSON.stringify({
+          l : "lobby", t : "join", v: true
+        }));
       }
       catch(err) {
         socket.send(JSON.stringify({
@@ -57,6 +62,7 @@ const LobbyData = function(data, socket) {
       }
       break;
     case 'start':
+      // 대충 씬을 넘기라는 거를 보내는 코드
       break;
   }
 }
@@ -66,10 +72,21 @@ const LobbyData = function(data, socket) {
  * @param {ws.WebSocket} socket 
  */
 const GameData = function(data, socket) {
+  var result = {
+    l : "game", t : data.t, v : data.v
+  }
   switch(data.t) {
     case 'input':
+      gameList[socket.game].forEach(client => {
+        if(client.id != socket.id) {
+          client.send(JSON.stringify(result));
+        }
+      });
       break;
     case 'system':
+      gameList[socket.game].forEach(client => {
+        client.send(JSON.stringify(result));
+      });
       break;
   }
 }
