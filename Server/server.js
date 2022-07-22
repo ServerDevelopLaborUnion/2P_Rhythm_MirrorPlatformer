@@ -1,133 +1,92 @@
 const ws = require('ws');
-const wss = new ws.Server({ port: 3000 });
+const wsServer = new ws.Server({port : 3000});
 
 let idcnt = 0;
-var roomList = new Array(Room);
+var form = { l : null, t : null, v : null};
+var roomList = [];
 
-wss.on('listening', () => {
+wsServer.on('listening', () => {
   console.log(`server opened on port ${wss.options.port}`);
 });
 
-wss.on('connection', (socket, req) => {
-  socket.id = idcnt++;
-  socket.on('message', (msg) => {
-    const data = JSON.parse(msg);
-    switch(data.l) {
+wsServer.on('connection', (client, req) => {
+  client.id = idcnt++;
+  client.on('message', (msg) => {
+    const Data = checkJSON(msg.toString());
+    if(Data == false) return;
+    switch(Data.l) {
       case 'game':
-        GameData(data, socket);
         break;
-      case 'error':
-        return;
+      case 'room':
+        break;
     }
   });
 });
 
 /**
- * 
- * @param {object} data 
  * @param {ws.WebSocket} socket 
+ * @param {object} data 
  */
-function GameData(data, socket) {
-  var result = {
-    l : 'game',
-    t : data.t,
-    v : data.v
-  };
-  var stringData = JSON.stringify(result);
-  switch(data.t) {
-    case 'input':
-      BroadCast(false, stringData, socket);
-      break;
-    case 'system':
-      BroadCast(true, stringData, socket);
-      break;
-    // case 'error':
-    //   break;
-  }
+const GameData = function(socket, data) {
+  
 }
 
 /**
- * @param {object} data
  * @param {ws.WebSocket} socket 
+ * @param {object} data 
  */
-function RoomData(data, socket) {
-  var result = {
-    l : 'room',
-    t : data.t,
-    v : null
-  }
+const RoomData = function(socket, data) {
+  var result = {...form};
   switch(data.t) {
     case 'make':
-      roomList.push(new Room(data.n, data.i));
-      var socData = {...result};
-      var usersData = {...result};
-      socData.t = 's';
-      usersData.t = 'make';
-      roomList.forEach(room => {
-        if(room.hostID == socket.id) {
-          
-          socData.v = room.roomInfo;
-          usersData.v = room.roomInfo;
-          socket.send(JSON.stringify(socData));
-          
-        }
-      });
+      
       break;
     case 'join':
-      roomList.forEach(room => {
-        if()
-      })
       break;
   }
 }
 
 class Room {
   /**
-   * @param {string} name 
-   * @param {Int16Array} id
+   * @param {string} n 
+   * @param {Int16Array} i 
    */
-  constructor(name, id) {
-    this.name = name
-    this.hostID = id;
-    this.userList = new Array(ws.WebSocket);
-    this.roomInfo = {
-      n : this.name,
-      i : this.hostID
-    }
+  constructor(n, i) {
+    this.name = n;
+    this.hostID = i;
+    this.roomInfo = { 
+      l : 'room', t : 'make', 
+      v : { n : this.name, i : this.hostID }
+    };
+    roomList.push(this);
+    wsServer.clients.forEach(user => {
+      if(user.id == this.hostID) {
+        user.send(JSON.stringify({
+          l : 'room', t : 'make', v : true
+        }));
+      }
+      else {
+        user.send(JSON.stringify(this.roomInfo));
+      }
+    });
   }
-  
-  /**
-   * @param {ws.WebSocket} socket 
-   */
-  addMember(socket) {
-    if(this.userList.length >= 2)
-      socket.send(JSON.stringify({
-        l : 'room',
-        t : 'error',
-        v : 'overflow member'
-      }));
-    this.userList.push(socket.id);
+  addUser(socket) {
+    this.otherID = socket.id;
   }
-  rmMember(socket) {
-    
+  removeUser(socket) {
+    this.otherID = null;
   }
-
 }
 
 /**
- * @param {boolean} sendSelf 
- * @param {string} data 
- * @param {ws.WebSocket} socket
+ * @param {string} jsonData
+ * @param {object} ParsedData
  */
-function BroadCast(sendSelf, data, socket) {
-  if(sendSelf) {
-    wss.clients.forEach(socket => {
-      socket.send(data);
-    });
+const checkJSON = (jsonData) => {
+  try {
+    return JSON.parse(jsonData);
   }
-  else {
-    wss.clients.forEach(soc => {
-      if(soc.id != socket.id) soc.send(data);
-    });
+  catch {
+    return false;
   }
 }
