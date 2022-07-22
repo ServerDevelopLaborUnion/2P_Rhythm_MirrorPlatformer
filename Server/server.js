@@ -18,6 +18,7 @@ wsServer.on('connection', (client, req) => {
       case 'game':
         break;
       case 'room':
+        RoomData(client, Data);
         break;
     }
   });
@@ -36,10 +37,9 @@ const GameData = function(socket, data) {
  * @param {object} data 
  */
 const RoomData = function(socket, data) {
-  var result = {...form};
   switch(data.t) {
     case 'make':
-      
+      roomList.push(new Room(data.v.n, socket.id));
       break;
     case 'join':
       break;
@@ -58,7 +58,6 @@ class Room {
       l : 'room', t : 'make', 
       v : { n : this.name, i : this.hostID }
     };
-    roomList.push(this);
     wsServer.clients.forEach(user => {
       if(user.id == this.hostID) {
         user.send(JSON.stringify({
