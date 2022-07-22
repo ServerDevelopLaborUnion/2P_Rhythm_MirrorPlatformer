@@ -9,20 +9,24 @@ namespace Main
 
         [SerializeField] PoolableMono roomUnit;
         private Transform canvas = null;
+        private Transform content = null;
 
         private void Awake()
         {
-            if(Instance == null) Instance = this;
             if(Instance != null) { Debug.Log($"Multiple RoomManager Instance is Running, Destroy This"); Destroy(gameObject); }
-            DontDestroyOnLoad(transform.root.gameObject);
+            if(Instance == null) Instance = this;
+            //DontDestroyOnLoad(transform.root.gameObject);
 
             canvas = GameObject.Find("Canvas").transform;
+            content = canvas.Find("MainPanel/Second/Panels/RoomPanel/ScrollView/Viewport/Content");
         }
 
-        public void CreateRoom(string ID, string RoomName)
+        public void CreateRoom(string RoomName)
         {
             RoomUnit temp = PoolManager.Instance.Pop(roomUnit) as RoomUnit;
-            temp.Init(ID, RoomName);
+            temp.Init("asd", RoomName);
+            temp.transform.SetParent(content);
+            temp.transform.localScale = Vector3.one;
         }
     }
 }
