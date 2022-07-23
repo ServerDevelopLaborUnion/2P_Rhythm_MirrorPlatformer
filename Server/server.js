@@ -63,7 +63,7 @@ const RoomData = function(data, socket) {
         if(gameList[data.v] == undefined) 
           throw new Error('game not found');
         gameList[data.v].push(socket);
-        socket.game =
+        socket.game = data.v;
         gameList[data.v].forEach(client => {
           client.send(JSON.stringify({
             l : 'game', t : 'loadScene', v : 'asdf' // 씬이름
