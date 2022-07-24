@@ -11,9 +11,8 @@ namespace Core
 
         private void Awake()
         {
-            if(Instance != null) { Debug.Log($"Multiple GameManager Instance is Running, Destroy This"); Destroy(this); }
-            if(Instance == null) Instance = this;
-            DontDestroyOnLoad(transform.root.gameObject);            
+            if(Instance != null) { Debug.Log($"Multiple GameManager Instance is Running, Destroy This"); Destroy(gameObject); }
+            if(Instance == null) { Instance = this; DontDestroyOnLoad(transform.root.gameObject); }       
         }
     }
 }

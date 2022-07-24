@@ -10,7 +10,6 @@ namespace Main
         private Button button = null;
         private TextMeshProUGUI infoText = null;
         private string roomName = null;
-        private string id = null;
 
         private void Awake()
         {

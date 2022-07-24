@@ -13,8 +13,7 @@ namespace Core
         private void Awake()
         {
             if(Instance != null) { Debug.Log($"Multiple PoolManager Instance is Running, Destroy This"); Destroy(gameObject); }
-            if(Instance == null) Instance = this;
-            //DontDestroyOnLoad(transform.root.gameObject);
+            if(Instance == null) { Instance = this; DontDestroyOnLoad(transform.root.gameObject); }
 
             pooler = transform.GetChild(0);
 

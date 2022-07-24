@@ -14,8 +14,7 @@ namespace Main
         private void Awake()
         {
             if(Instance != null) { Debug.Log($"Multiple RoomManager Instance is Running, Destroy This"); Destroy(gameObject); }
-            if(Instance == null) Instance = this;
-            //DontDestroyOnLoad(transform.root.gameObject);
+            if(Instance == null) { Instance = this; DontDestroyOnLoad(transform.root.gameObject); }
 
             canvas = GameObject.Find("Canvas").transform;
             content = canvas.Find("MainPanel/Second/Panels/RoomPanel/ScrollView/Viewport/Content");

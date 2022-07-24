@@ -43,8 +43,7 @@ namespace Main
         private void Awake()
         {
             if(Instance != null) { Debug.Log($"Multiple Client Instance is Running, Destroy This"); Destroy(gameObject); }
-            if (Instance == null) Instance = this;
-            //DontDestroyOnLoad(transform.root.gameObject);
+            if(Instance == null) { Instance = this; DontDestroyOnLoad(transform.root.gameObject); }
         }
 
         private void Start()
@@ -106,27 +105,14 @@ namespace Main
                 case "input":
                     actions.Enqueue(() => InputData(p));
                     break;
-                case "system":
-                    actions.Enqueue(() => SystemData(p));
+                case "loadScene":
+                    actions.Enqueue(() => Test.Instance.Load(p.Value));
+                    break;
+                case "unLoadScene":
+                    actions.Enqueue(() => Test.Instance.UnLoad(p.Value));
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
-                    break;
-            }
-        }
-
-        private void SystemData(Packet p)
-        {
-            switch (p.Value)
-            {
-                case "loadScene":
-                    actions.Enqueue(() => Test.Instance.Load());
-                    break;
-                case "unLoadScene":
-                    actions.Enqueue(() => Test.Instance.UnLoad());
-                    break;
-                case "error":
-                    actions.Enqueue(() => Debug.Log($"{p.Value}") );
                     break;
             }
         }
