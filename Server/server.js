@@ -34,12 +34,12 @@ const GameData = function(data, socket) {
       gameList[socket.game].forEach(client => {
         if(client.id != socket.id) 
           client.send(JSON.stringify(data));
-      })
+      });
       break;
     default:
       gameList[socket.game].forEach(client => {
         client.send(JSON.stringify(data));
-      })
+      });
       break;
   }
 }
@@ -54,6 +54,9 @@ const RoomData = function(data, socket) {
       gameList[data.v] = [];
       gameList[data.v].push(socket);
       socket.game = data.v;
+      console.log(
+        `client ${socket.id} create room. name : ${socket.game}`
+      );
       wss.clients.forEach(client => {
         client.send(JSON.stringify(data));
       });
@@ -64,11 +67,14 @@ const RoomData = function(data, socket) {
           throw new Error('game not found');
         gameList[data.v].push(socket);
         socket.game = data.v;
-        gameList[data.v].forEach(client => {
-          client.send(JSON.stringify({
-            l : 'game', t : 'loadScene', v : 'asdf' // 씬이름
-          }));
-        });
+        console.log(
+          `client ${socket.id} join room. name : ${socket.game}`
+        );
+        // gameList[data.v].forEach(client => {
+        //   client.send(JSON.stringify({
+        //     l : 'game', t : 'loadScene', v : 'asdf' // 씬이름
+        //   }));
+        // });
       }
       catch(err) {
         socket.send(JSON.stringify({
