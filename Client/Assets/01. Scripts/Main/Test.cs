@@ -14,6 +14,11 @@ namespace Main
             DontDestroyOnLoad(transform.root.gameObject);
         }
 
+        public void AddMessage(string sceneName)
+        {
+            Client.Instance.SendMessages("game", "addScene", sceneName);
+        }
+
         public void LoadMessage(string sceneName)
         {
             Client.Instance.SendMessages("game", "loadScene", sceneName);
@@ -24,15 +29,21 @@ namespace Main
             Client.Instance.SendMessages("game", "unLoadScene", sceneName);
         }
 
-        public void Load(string sceneName)
+        public void LoadScene(string sceneName)
         {
-            Debug.Log($"lets load the scene");
+            Debug.Log($"Load Scene : {sceneName}");
+            SceneManager.LoadScene(sceneName);
+        }
+
+        public void AddScene(string sceneName)
+        {
+            Debug.Log($"Add Scene : {sceneName}");
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
 
-        public void UnLoad(string sceneName)
+        public void RemoveScene(string sceneName)
         {
-            Debug.Log($"lets unload the scene");
+            Debug.Log($"Remove Scene : {sceneName}");
             SceneManager.UnloadSceneAsync(sceneName);
         }
     }

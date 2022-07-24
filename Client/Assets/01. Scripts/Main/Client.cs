@@ -30,16 +30,6 @@ namespace Main
             }
         }
 
-        public class RoomPacket
-        {
-            [JsonProperty("n")] public string Name;
-
-            public RoomPacket(string name)
-            {
-                Name = name;
-            }
-        }
-
         private void Awake()
         {
             if(Instance != null) { Debug.Log($"Multiple Client Instance is Running, Destroy This"); Destroy(gameObject); }
@@ -66,7 +56,7 @@ namespace Main
             {
                 if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                actions.Enqueue(() => Debug.Log($"{p.Locate}"));
+                actions.Enqueue(() => Debug.Log($"Packet : {p}"));
                 switch (p.Locate)
                 {
                     case "game":
@@ -83,13 +73,11 @@ namespace Main
         }
 #region 룸
         private void RoomData(Packet p)
-        {
-            RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
-            
+        {       
             switch(p.Type)
             {
                 case "create":
-                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(rp.Name) );
+                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
@@ -105,11 +93,14 @@ namespace Main
                 case "input":
                     actions.Enqueue(() => InputData(p));
                     break;
+                case "addScene":
+                    actions.Enqueue(() => Test.Instance.AddScene(p.Value));
+                    break;
                 case "loadScene":
-                    actions.Enqueue(() => Test.Instance.Load(p.Value));
+                    actions.Enqueue(() => Test.Instance.LoadScene(p.Value));
                     break;
                 case "unLoadScene":
-                    actions.Enqueue(() => Test.Instance.UnLoad(p.Value));
+                    actions.Enqueue(() => Test.Instance.RemoveScene(p.Value));
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );

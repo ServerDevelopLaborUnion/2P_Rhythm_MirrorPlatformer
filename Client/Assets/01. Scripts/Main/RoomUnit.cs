@@ -26,6 +26,7 @@ namespace Main
         public void EnterRoom()
         {
             Client.Instance.SendMessages("room", "join", roomName);
+            Test.Instance.LoadScene("TestLobby");
         }
 
         public override void Reset()

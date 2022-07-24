@@ -16,6 +16,7 @@ namespace Main
         public void RequestCreate()
         {
             Client.Instance.SendMessages("room", "create", field.text);
+            Test.Instance.LoadScene("TestLobby");
         }
     }
 }
