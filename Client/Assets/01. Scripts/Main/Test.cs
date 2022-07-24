@@ -9,24 +9,9 @@ namespace Main
 
         private void Awake()
         {
-            if(Instance == null) Instance = this;
             if(Instance != null) { Debug.Log($"Multiple Test Instance is Running, Destroy This"); Destroy(gameObject); }
+            if(Instance == null) Instance = this;
             DontDestroyOnLoad(transform.root.gameObject);
-        }
-
-        public void AddMessage(string sceneName)
-        {
-            Client.Instance.SendMessages("game", "addScene", sceneName);
-        }
-
-        public void LoadMessage(string sceneName)
-        {
-            Client.Instance.SendMessages("game", "loadScene", sceneName);
-        }
-
-        public void UnloadMessage(string sceneName)
-        {
-            Client.Instance.SendMessages("game", "unLoadScene", sceneName);
         }
 
         public void LoadScene(string sceneName)
