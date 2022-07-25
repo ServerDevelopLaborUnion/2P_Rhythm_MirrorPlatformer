@@ -3,7 +3,6 @@ using WebSocketSharp;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Core;
 
 namespace Main
 {
