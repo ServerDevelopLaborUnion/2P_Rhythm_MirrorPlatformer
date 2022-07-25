@@ -1,15 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Main
+namespace Core
 {
-    public class Test : MonoBehaviour
+    public class SceneLoader : MonoBehaviour
     {
-        public static Test Instance = null;
+        public static SceneLoader Instance = null;
 
         private void Awake()
         {
-            if(Instance != null) { Debug.Log($"Multiple Test Instance is Running, Destroy This"); Destroy(gameObject); }
+            if(Instance != null) { Debug.Log($"Multiple SceneLoader Instance is Running, Destroy This"); Destroy(gameObject); }
             if(Instance == null) Instance = this;
             DontDestroyOnLoad(transform.root.gameObject);
         }

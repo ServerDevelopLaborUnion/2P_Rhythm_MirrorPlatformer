@@ -1,5 +1,4 @@
 using Core;
-using Newtonsoft.Json;
 using UnityEngine.UI;
 using TMPro;
 
@@ -26,7 +25,8 @@ namespace Main
         public void EnterRoom()
         {
             Client.Instance.SendMessages("room", "join", roomName);
-            Test.Instance.LoadScene("TestLobby");
+            DataManager.Instance.ud.isHost = false;
+            SceneLoader.Instance.LoadScene("INGAME");
         }
 
         public override void Reset()

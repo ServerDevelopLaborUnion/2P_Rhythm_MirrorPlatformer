@@ -1,5 +1,5 @@
-using Core;
 using UnityEngine;
+using Core;
 
 namespace Main
 {

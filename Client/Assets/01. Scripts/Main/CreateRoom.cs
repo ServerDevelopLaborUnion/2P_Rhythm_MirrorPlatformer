@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-using Newtonsoft.Json;
+using Core;
 
 namespace Main
 {
@@ -16,7 +16,8 @@ namespace Main
         public void RequestCreate()
         {
             Client.Instance.SendMessages("room", "create", field.text);
-            Test.Instance.LoadScene("TestLobby");
+            DataManager.Instance.ud.isHost = true;
+            SceneLoader.Instance.LoadScene("INGAME");
         }
     }
 }

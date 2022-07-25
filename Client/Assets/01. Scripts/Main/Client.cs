@@ -3,6 +3,7 @@ using WebSocketSharp;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Core;
 
 namespace Main
 {
@@ -79,6 +80,9 @@ namespace Main
                 case "create":
                     actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
                     break;
+                case "init":
+                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
+                    break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
                     break;
@@ -94,13 +98,13 @@ namespace Main
                     actions.Enqueue(() => InputData(p));
                     break;
                 case "addScene":
-                    actions.Enqueue(() => Test.Instance.AddScene(p.Value));
+                    actions.Enqueue(() => SceneLoader.Instance.AddScene(p.Value));
                     break;
                 case "loadScene":
-                    actions.Enqueue(() => Test.Instance.LoadScene(p.Value));
+                    actions.Enqueue(() => SceneLoader.Instance.LoadScene(p.Value));
                     break;
                 case "unLoadScene":
-                    actions.Enqueue(() => Test.Instance.RemoveScene(p.Value));
+                    actions.Enqueue(() => SceneLoader.Instance.RemoveScene(p.Value));
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
