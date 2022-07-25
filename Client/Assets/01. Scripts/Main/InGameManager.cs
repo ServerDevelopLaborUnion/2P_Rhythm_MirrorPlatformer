@@ -29,10 +29,19 @@ namespace Main
         {
             Reset();
             
-            stagePanel.SetActive(false);
-            loadingPanel.SetActive(false);
-            
             Client.Instance.SendMessages("game", "start", stageIndex);
+        }
+
+        public void UnlockStage(string name)
+        {
+            DataManager.Instance.sd.unlockedStage.Add(name);
+        }
+
+        public void LoadStage(string index)
+        {
+            Stage stage = Resources.Load<Stage>($"Stages/Stage{index}");
+            Instantiate(stage, Vector3.zero, Quaternion.identity);
+            stage.Init();
         }
     }
 }
