@@ -26,6 +26,7 @@ namespace Main
             temp.Init(RoomName);
             temp.transform.SetParent(content);
             temp.transform.localScale = Vector3.one;
+            temp.transform.rotation = content.rotation;
         }
     }
 }

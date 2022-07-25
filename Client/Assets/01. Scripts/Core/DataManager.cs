@@ -34,6 +34,7 @@ namespace Core
 
         private void SaveUserData()
         {
+            ud.isHost = false;
             string JSON = JsonConvert.SerializeObject(ud);
             PlayerPrefs.SetString("udJSON", JSON);
         }

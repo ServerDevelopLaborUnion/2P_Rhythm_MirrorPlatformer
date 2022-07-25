@@ -49,6 +49,8 @@ namespace Main
             server.OnMessage += GetMessages;
 
             server.Connect();
+
+            if(!server.IsAlive) Debug.Log($"Server is Not Connected");
         }
 
         private void GetMessages(object sender, MessageEventArgs e)
@@ -97,14 +99,8 @@ namespace Main
                 case "input":
                     actions.Enqueue(() => InputData(p));
                     break;
-                case "addScene":
-                    actions.Enqueue(() => SceneLoader.Instance.AddScene(p.Value));
-                    break;
-                case "loadScene":
-                    actions.Enqueue(() => SceneLoader.Instance.LoadScene(p.Value));
-                    break;
-                case "unLoadScene":
-                    actions.Enqueue(() => SceneLoader.Instance.RemoveScene(p.Value));
+                case "start":
+                    actions.Enqueue(() => StageManager.Instance.LoadStage(p.Value) );
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
