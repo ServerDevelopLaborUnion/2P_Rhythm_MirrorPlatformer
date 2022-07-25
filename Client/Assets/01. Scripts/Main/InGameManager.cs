@@ -39,6 +39,9 @@ namespace Main
 
         public void LoadStage(string index)
         {
+            stagePanel.SetActive(false);
+            loadingPanel.SetActive(false);
+
             Stage stage = Resources.Load<Stage>($"Stages/Stage{index}");
             Instantiate(stage, Vector3.zero, Quaternion.identity);
             stage.Init();
