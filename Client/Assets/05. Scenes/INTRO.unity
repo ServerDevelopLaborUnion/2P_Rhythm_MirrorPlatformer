@@ -3059,7 +3059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8695e351b54c3bc469d5132cd424c4ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IP: localHost
+  IP: 25.52.117.228
   Port: 3000
 --- !u!1 &1170995339
 GameObject:

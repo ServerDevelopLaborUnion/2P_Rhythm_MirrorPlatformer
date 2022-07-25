@@ -59,7 +59,7 @@ namespace Main
             {
                 if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                actions.Enqueue(() => Debug.Log($"Locate : {p.Locate}"));
+                actions.Enqueue(() => Debug.Log($"Locate : {p.Value}"));
                 switch (p.Locate)
                 {
                     case "game":
@@ -76,7 +76,7 @@ namespace Main
         }
 #region 룸
         private void RoomData(Packet p)
-        {       
+        {
             switch(p.Type)
             {
                 case "create":
