@@ -35,6 +35,11 @@ wss.on('connection', (client, req) => {
  */
 const GameData = function(data, socket) {
   switch(data.t) {
+    case 'start':
+      gameList[socket.game].forEach(client => {
+        client.send(JSON.stringify(data));
+      }); 
+      break;
     case 'input':
       gameList[socket.game].forEach(client => {
         if(client.id != socket.id) 
