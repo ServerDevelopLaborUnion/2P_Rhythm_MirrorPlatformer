@@ -63,7 +63,8 @@ const RoomData = function(data, socket) {
         `client ${socket.id} create room. name : ${socket.game}`
       );
       wss.clients.forEach(client => {
-        client.send(JSON.stringify(data));
+        if(socket.id != client.id) 
+          client.send(JSON.stringify(data));
       });
       break;
     case 'join':
