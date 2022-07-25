@@ -59,7 +59,7 @@ namespace Main
             {
                 if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                actions.Enqueue(() => Debug.Log($"Locate : {p.Value}"));
+                actions.Enqueue(() => Debug.Log($"Stage{p.Value}"));
                 switch (p.Locate)
                 {
                     case "game":
