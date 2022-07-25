@@ -10,6 +10,11 @@ wss.on('listening', () => {
 
 wss.on('connection', (client, req) => {
   client.id = idcnt++;
+  Object.keys(gameList).forEach(name => {
+    client.send(JSON.stringify({
+      l : 'room', t : 'init', v : name
+    }));
+  });
   client.on('message', msg => {
     const Data = ObjectParser(msg.toString());
     if(Data == false) return;
