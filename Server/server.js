@@ -109,7 +109,10 @@ const RoomData = function(data, socket) {
         gameList[socket.game].forEach(client => {
          client.send(JSON.stringify(data));
         });
-        // socket.game = undefined;
+        console.log(
+          `client ${socket.id} join room. name : ${socket.game}`
+        );
+        socket.game = undefined;
       break;
   }
 }
