@@ -86,7 +86,10 @@ namespace Main
                     actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
                     break;
                 case "quit":
-                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INTRO") );
+                    actions.Enqueue(() => {
+                        SceneLoader.Instance.LoadScene("INTRO");
+                        TextSpawner.Instance.SpawnText("Host is Disconnected With Room");
+                    });
                     break;
                 case "init":
                     actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
