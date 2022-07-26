@@ -2,6 +2,7 @@ using System;
 using WebSocketSharp;
 using UnityEngine;
 using Newtonsoft.Json;
+using Core;
 using System.Collections.Generic;
 
 namespace Main
@@ -83,6 +84,9 @@ namespace Main
                     break;
                 case "join":
                     actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
+                    break;
+                case "quit":
+                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INTRO") );
                     break;
                 case "init":
                     actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );

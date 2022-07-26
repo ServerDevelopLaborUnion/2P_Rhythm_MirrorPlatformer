@@ -9,6 +9,7 @@ namespace Main
         [SerializeField] LayerMask groundLayer = 128;
         private Rigidbody2D rb2d = null;
         private Collider2D col2d = null;
+        public int jumpCnt = 0;
 
         private void Awake()
         {
@@ -18,8 +19,10 @@ namespace Main
 
         public void DoJump(Action callBack = null)
         {
-            if(!IsGround()) return;
-            
+            if(IsGround()) jumpCnt = 0;
+            if(jumpCnt > 1) return;
+            jumpCnt ++;
+
             rb2d.velocity = Vector2.zero;
             rb2d.AddForce(dir, ForceMode2D.Impulse);
             

@@ -11,14 +11,10 @@ namespace Main
         {
             jump = GetComponent<PlayerJump>();
         }
-
+        
         private void Update()
         {
             Crash();
-        }
-
-        private void FixedUpdate()
-        {
             if (Input.GetKeyDown(KeyCode.Space))
                 jump.DoJump(() => {
                     Client.Instance.SendMessages("game", "input", "jump");
