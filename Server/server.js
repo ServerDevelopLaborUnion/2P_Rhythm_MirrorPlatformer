@@ -83,6 +83,8 @@ const RoomData = function(data, socket) {
       try {
         if(gameList[data.v] == undefined) 
           throw new Error('game not found');
+        else if(gameList[data.v].length >= 2)
+          throw new Error('the room is full');
         gameList[data.v].push(socket);
         socket.game = data.v;
         console.log(
