@@ -58,7 +58,7 @@ namespace Main
             {
                 if (e.Data.Length == 0 || e.Data == null) return;
                 Packet p = JsonConvert.DeserializeObject<Packet>(e.Data);
-                actions.Enqueue(() => Debug.Log($"Locate:{p.Locate}"));
+                actions.Enqueue(() => Debug.Log($"Type:{p.Type}"));
                 switch (p.Locate)
                 {
                     case "game":
@@ -81,6 +81,9 @@ namespace Main
                 case "create":
                     actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
                     break;
+                case "join":
+                    actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
+                    break;
                 case "init":
                     actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
                     break;
@@ -100,6 +103,9 @@ namespace Main
                     break;
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
+                    break;
+                case "dead":
+                    actions.Enqueue(() => InGameManager.Instance.currentStage.Reset() );
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );

@@ -9,12 +9,6 @@ EditorBuildSettings:
     path: Assets/05. Scenes/INTRO.unity
     guid: 8a97c2f9e655c2445b1b8875c94c0e26
   - enabled: 1
-    path: Assets/05. Scenes/TestLobby.unity
-    guid: 8572a2dcbe2faef4da779187ecf01f12
-  - enabled: 1
-    path: Assets/05. Scenes/SEH00N.unity
-    guid: e445ff4b20584354eb6810883501c216
-  - enabled: 1
     path: Assets/05. Scenes/INGAME.unity
     guid: 0385b82fc5e03d44191727bdbe5c6166
   m_configObjects: {}

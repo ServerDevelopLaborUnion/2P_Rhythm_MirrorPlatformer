@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useSafeMode: 1
   safeModeOptions:
-    logBehaviour: 2
+    logBehaviour: 0
     nestedTweenFailureBehaviour: 0
   timeScale: 1
   useSmoothDeltaTime: 0
   maxSmoothUnscaledTime: 0.15
   rewindCallbackMode: 0
   showUnityEditorReport: 0
-  logBehaviour: 0
+  logBehaviour: 2
   drawGizmos: 1
   defaultRecyclable: 0
   defaultAutoPlay: 3

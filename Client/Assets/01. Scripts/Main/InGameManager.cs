@@ -1,5 +1,6 @@
 using Core;
 using UnityEngine;
+using Cinemachine;
 
 namespace Main
 {
@@ -7,28 +8,35 @@ namespace Main
     {
         public static InGameManager Instance = null;
 
+        private CinemachineVirtualCamera mainVCam = null;
         private Canvas canvas = null;
-        private GameObject stagePanel = null, loadingPanel = null;
+        public GameObject StagePanel { get; set; } = null;
+        public GameObject LoadingPanel { get; set; } = null;
+        public GameObject WaitingPanel { get; set; } = null;
+        public Stage currentStage { get; set; }
 
         private void Awake()
         {
-            if(Instance != null) { Debug.Log($"Multiple InGameManager Instance is Running, Destroy This"); Destroy(gameObject); }
-            if(Instance == null) Instance = this;
+            if (Instance != null) { Debug.Log($"Multiple InGameManager Instance is Running, Destroy This"); Destroy(gameObject); }
+            if (Instance == null) Instance = this;
 
+            mainVCam = GameObject.Find("MainVCam").GetComponent<CinemachineVirtualCamera>();
             canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            stagePanel = canvas.transform.Find("Panels/StagePanel").gameObject;
-            loadingPanel = canvas.transform.Find("Panels/LoadingPanel").gameObject;
+            StagePanel = canvas.transform.Find("Panels/StagePanel").gameObject;
+            LoadingPanel = canvas.transform.Find("Panels/LoadingPanel").gameObject;
+            WaitingPanel = canvas.transform.Find("Panels/WaitingPanel").gameObject;
 
             if(DataManager.Instance.ud.isHost)
-                loadingPanel.SetActive(false);
-            if(!DataManager.Instance.ud.isHost)
-                stagePanel.SetActive(false);
+                LoadingPanel.SetActive(false);
+
+            if (!DataManager.Instance.ud.isHost)
+                WaitingPanel.SetActive(false);
         }
 
         public void StartGame(string stageIndex)
         {
             Reset();
-            
+
             Client.Instance.SendMessages("game", "start", stageIndex);
         }
 
@@ -39,12 +47,14 @@ namespace Main
 
         public void LoadStage(string index)
         {
-            stagePanel.SetActive(false);
-            loadingPanel.SetActive(false);
+            StagePanel.SetActive(false);
+            LoadingPanel.SetActive(false);
 
-            Stage stage = Resources.Load<Stage>($"Stages/Stage{index}");
-            Instantiate(stage, Vector3.zero, Quaternion.identity);
-            stage.Init();
+            currentStage = Resources.Load<Stage>($"Stages/Stage{index}");
+            Instantiate(currentStage, Vector3.zero, Quaternion.identity);
+            currentStage.Init();
+
+            mainVCam.m_Lens.OrthographicSize = currentStage.Ortho;
         }
     }
 }
