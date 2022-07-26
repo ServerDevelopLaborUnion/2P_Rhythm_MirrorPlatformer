@@ -36,31 +36,6 @@ wss.on('connection', (client, req) => {
 const GameData = function(data, socket) {
   if(socket.game == undefined) return;
   BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
-  // switch(data.t) {
-  //   case 'start':
-  //     gameList[socket.game].forEach(client => {
-  //       client.send(JSON.stringify(data));
-  //     }); 
-  //     break;
-  //   case 'input':
-  //     gameList[socket.game].forEach(client => {
-  //       if(client.id != socket.id) 
-  //         client.send(JSON.stringify(data));
-  //     });
-  //     break;
-  //   case 'dead':
-  //     gameList[socket.game].forEach(client => {
-  //       // if(socket.id != client.id) {
-  //         client.send(JSON.stringify(data));
-  //       // }
-  //     });
-  //     break;
-  //   default:
-  //     gameList[socket.game].forEach(client => {
-  //       client.send(JSON.stringify(data));
-  //     });
-  //     break;
-  // }
 }
 
 /**
@@ -80,10 +55,6 @@ const RoomData = function(data, socket) {
           `client ${socket.id} create room. name : ${socket.game}`
         );
         BroadCast(wss.clients, false, socket, JSON.stringify(data));
-        // wss.clients.forEach(client => {
-        //   if(socket.id != client.id) 
-        //     client.send(JSON.stringify(data));
-        // });
       }
       catch(err) {
         socket.send(JSON.stringify({
@@ -103,10 +74,6 @@ const RoomData = function(data, socket) {
           `client ${socket.id} join room. name : ${socket.game}`
         );
         BroadCast(gameList[data.v], false, socket, JSON.stringify(data));
-        // gameList[data.v].forEach(client => {
-        //   if(client.id != socket.id)
-        //     client.send(JSON.stringify(data));
-        // });
       }
       catch(err) {
         socket.send(JSON.stringify({
@@ -129,9 +96,6 @@ const RoomData = function(data, socket) {
             gameList[socket.game].indexOf(socket)
           );
           BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
-          // gameList[socket.game].forEach(client => {
-          //   client.send(JSON.stringify(data));
-          // });
           console.log(
             `client ${socket.id} quit room. name : ${socket.game}`
           );
