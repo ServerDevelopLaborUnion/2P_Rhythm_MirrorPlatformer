@@ -34,31 +34,33 @@ wss.on('connection', (client, req) => {
  * @param {ws.WebSocket} socket 
  */
 const GameData = function(data, socket) {
-  switch(data.t) {
-    case 'start':
-      gameList[socket.game].forEach(client => {
-        client.send(JSON.stringify(data));
-      }); 
-      break;
-    case 'input':
-      gameList[socket.game].forEach(client => {
-        if(client.id != socket.id) 
-          client.send(JSON.stringify(data));
-      });
-      break;
-    case 'dead':
-      gameList[socket.game].forEach(client => {
-        // if(socket.id != client.id) {
-          client.send(JSON.stringify(data));
-        // }
-      })
-      break;
-    default:
-      gameList[socket.game].forEach(client => {
-        client.send(JSON.stringify(data));
-      });
-      break;
-  }
+  if(socket.game == undefined) return;
+  BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
+  // switch(data.t) {
+  //   case 'start':
+  //     gameList[socket.game].forEach(client => {
+  //       client.send(JSON.stringify(data));
+  //     }); 
+  //     break;
+  //   case 'input':
+  //     gameList[socket.game].forEach(client => {
+  //       if(client.id != socket.id) 
+  //         client.send(JSON.stringify(data));
+  //     });
+  //     break;
+  //   case 'dead':
+  //     gameList[socket.game].forEach(client => {
+  //       // if(socket.id != client.id) {
+  //         client.send(JSON.stringify(data));
+  //       // }
+  //     });
+  //     break;
+  //   default:
+  //     gameList[socket.game].forEach(client => {
+  //       client.send(JSON.stringify(data));
+  //     });
+  //     break;
+  // }
 }
 
 /**
@@ -68,16 +70,26 @@ const GameData = function(data, socket) {
 const RoomData = function(data, socket) {
   switch(data.t) {
     case 'create':
-      gameList[data.v] = [];
-      gameList[data.v].push(socket);
-      socket.game = data.v;
-      console.log(
-        `client ${socket.id} create room. name : ${socket.game}`
-      );
-      wss.clients.forEach(client => {
-        if(socket.id != client.id) 
-          client.send(JSON.stringify(data));
-      });
+      try {
+        if(gameList[data.v] != undefined) 
+          throw new Error('game name already on server');
+        gameList[data.v] = [];
+        gameList[data.v].push(socket);
+        socket.game = data.v;
+        console.log(
+          `client ${socket.id} create room. name : ${socket.game}`
+        );
+        BroadCast(wss.clients, false, socket, JSON.stringify(data));
+        // wss.clients.forEach(client => {
+        //   if(socket.id != client.id) 
+        //     client.send(JSON.stringify(data));
+        // });
+      }
+      catch(err) {
+        socket.send(JSON.stringify({
+          l : 'room', t : 'create', v : err.toString()
+        }));
+      }
       break;
     case 'join':
       try {
@@ -90,10 +102,11 @@ const RoomData = function(data, socket) {
         console.log(
           `client ${socket.id} join room. name : ${socket.game}`
         );
-        gameList[data.v].forEach(client => {
-          if(client.id != socket.id)
-            client.send(JSON.stringify(data));
-        });
+        BroadCast(gameList[data.v], false, socket, JSON.stringify(data));
+        // gameList[data.v].forEach(client => {
+        //   if(client.id != socket.id)
+        //     client.send(JSON.stringify(data));
+        // });
       }
       catch(err) {
         socket.send(JSON.stringify({
@@ -102,16 +115,27 @@ const RoomData = function(data, socket) {
       }
       break;
     case 'quit':
-        gameList[socket.game].splice(
-          gameList[socket.game].indexOf(socket),
-          gameList[socket.game].indexOf(socket)
-        );
-        gameList[socket.game].forEach(client => {
-         client.send(JSON.stringify(data));
-        });
-        console.log(
-          `client ${socket.id} join room. name : ${socket.game}`
-        );
+        if(gameList[socket.game].indexOf(socket) == 0) {
+          gameList[socket.game].forEach(client => {
+            client.send(JSON.stringify(data));
+            if(socket.id != client.id) 
+              client.game = undefined;
+          });
+          gameList[socket.game] = undefined;
+        }
+        else if(gameList[socket.game].indexOf(socket) == 1) {
+          gameList[socket.game].splice(
+            gameList[socket.game].indexOf(socket),
+            gameList[socket.game].indexOf(socket)
+          );
+          BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
+          // gameList[socket.game].forEach(client => {
+          //   client.send(JSON.stringify(data));
+          // });
+          console.log(
+            `client ${socket.id} quit room. name : ${socket.game}`
+          );
+        }
         socket.game = undefined;
       break;
   }
@@ -128,4 +152,25 @@ const ObjectParser = function(stringData) {
   catch(err) {
     return false;
   }
-}
+};
+
+/**
+ * @param {Array} array 
+ * @param {boolean} sendSelf 
+ * @param {ws.WebSocket} socket 
+ * @param {string} data 
+ */
+const BroadCast = function(array, sendSelf, socket, data) {
+  if(sendSelf) {
+    array.forEach(client => {
+      client.send(data);
+    });
+  }
+  else {
+    array.forEach(client => {
+      if(client.id != socket.id) {
+        client.send(data);
+      }
+    });
+  }
+};
