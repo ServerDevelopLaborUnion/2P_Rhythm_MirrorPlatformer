@@ -9,6 +9,7 @@ namespace Main
         {
             Client.Instance.SendMessages("room", "quit", "");
             SceneLoader.Instance.LoadScene("INTRO");
+            TextSpawner.Instance.SpawnText("Disconnecting With Room");
         }
     }
 }
