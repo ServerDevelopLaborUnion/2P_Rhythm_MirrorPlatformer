@@ -46,6 +46,13 @@ const GameData = function(data, socket) {
           client.send(JSON.stringify(data));
       });
       break;
+    case 'dead':
+      gameList[socket.game].forEach(client => {
+        if(socket.id != client.id) {
+          client.send(JSON.stringify(data));
+        }
+      })
+      break;
     default:
       gameList[socket.game].forEach(client => {
         client.send(JSON.stringify(data));
