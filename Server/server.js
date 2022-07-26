@@ -81,11 +81,10 @@ const RoomData = function(data, socket) {
         console.log(
           `client ${socket.id} join room. name : ${socket.game}`
         );
-        // gameList[data.v].forEach(client => {
-        //   client.send(JSON.stringify({
-        //     l : 'game', t : 'loadScene', v : 'asdf' // 씬이름
-        //   }));
-        // });
+        gameList[data.v].forEach(client => {
+          if(client.id != socket.id)
+            client.send(JSON.stringify(data));
+        });
       }
       catch(err) {
         socket.send(JSON.stringify({
