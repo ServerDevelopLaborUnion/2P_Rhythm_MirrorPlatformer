@@ -102,13 +102,14 @@ const RoomData = function(data, socket) {
       }
       break;
     case 'quit':
-       gameList[socket.game].splice(
-        gameList[socket.game].indexOf(socket),
-        gameList[socket.game].indexOf(socket)
-       );
-       gameList[socket.game].forEach(client => {
-        client.send(JSON.stringify(data));
-       });
+        gameList[socket.game].splice(
+          gameList[socket.game].indexOf(socket),
+          gameList[socket.game].indexOf(socket)
+        );
+        gameList[socket.game].forEach(client => {
+         client.send(JSON.stringify(data));
+        });
+        // socket.game = undefined;
       break;
   }
 }
