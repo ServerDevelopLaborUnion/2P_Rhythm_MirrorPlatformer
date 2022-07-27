@@ -44,63 +44,66 @@ const GameData = function(data, socket) {
  */
 const RoomData = function(data, socket) {
   switch(data.t) {
-    case 'create':
+    case 'createReq':
       try {
-        if(gameList[data.v] != undefined) 
-          throw new Error('game name already on server');
+        if(gameList[data.v] != undefined)
+          throw new Error('Failed Creating Room');
         gameList[data.v] = [];
         gameList[data.v].push(socket);
         socket.game = data.v;
         console.log(
           `client ${socket.id} create room. name : ${socket.game}`
         );
-        BroadCast(wss.clients, false, socket, JSON.stringify(data));
+        BroadCast(wss.clients, false, socket, JSON.stringify({
+          l : 'room', t : 'create', v : data.v
+        }));
+        socket.send(JSON.stringify({
+          l : 'room', t : 'createRes', v : data.v
+        }));
       }
       catch(err) {
         socket.send(JSON.stringify({
-          l : 'room', t : 'create', v : err.toString()
+          l : 'room', t : 'createErr', v : err.toString()
         }));
       }
       break;
-    case 'join':
+    case 'joinReq':
       try {
         if(gameList[data.v] == undefined) 
-          throw new Error('game not found');
+          throw new Error('Game not found');
         else if(gameList[data.v].length >= 2)
-          throw new Error('the room is full');
+          throw new Error('The room is full');
         gameList[data.v].push(socket);
         socket.game = data.v;
         console.log(
           `client ${socket.id} join room. name : ${socket.game}`
         );
-        BroadCast(gameList[data.v], false, socket, JSON.stringify(data));
+        BroadCast(gameList[data.v], false, socket, JSON.stringify({
+          l : 'room', t : 'join', v : socket.id
+        }));
+        socket.send(JSON.stringify({
+          l : 'room', t : 'joinRes', v : data.v
+        }));
       }
       catch(err) {
         socket.send(JSON.stringify({
-          l : 'room', t : 'join', v : err.toString()
+          l : 'room', t : 'joinErr', v : err.toString()
         }));
       }
       break;
-    case 'quit':
-        if(gameList[socket.game].indexOf(socket) == 0) {
-          gameList[socket.game].forEach(client => {
-            client.send(JSON.stringify(data));
-            if(socket.id != client.id) 
-              client.game = undefined;
-          });
-          gameList[socket.game] = undefined;
-        }
-        else if(gameList[socket.game].indexOf(socket) == 1) {
-          gameList[socket.game].splice(
-            gameList[socket.game].indexOf(socket),
-            gameList[socket.game].indexOf(socket)
-          );
-          BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
-          console.log(
-            `client ${socket.id} quit room. name : ${socket.game}`
-          );
-        }
-        socket.game = undefined;
+    case 'quitReq':
+      BroadCast(gameList[socket.game], false, socket, JSON.stringify({
+        l : 'room', t : 'quit', v : socket.game
+      }));
+      socket.send(JSON.stringify({ l : 'room', t : 'quitRes', v : socket.game }));
+      BroadCast(wss.clients, false, socket, JSON.stringify({
+        l : 'room', t : 'roomDel', v : socket.game
+      }));
+      gameList[socket.game].forEach(client => {
+        if(client.id != socket.id) client.game = undefined;
+      });
+      gameList[socket.game] = undefined;
+      socket.game = undefined;
       break;
   }
 }
