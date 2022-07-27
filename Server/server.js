@@ -27,6 +27,20 @@ wss.on('connection', (client, req) => {
         break;
     }
   });
+  client.on('close', () => {
+    if(client.game == undefined) return;
+    if(client.game != undefined) {
+      gameList[client.game].forEach(socket => {
+        if(socket.id != client.id) {
+          socket.send(JSON.stringify({
+            l : 'room', t : 'quit', v : client.game
+          }));
+          socket.game = undefined;
+        }
+      });
+      gameList[client.game] = undefined;
+    }
+  })
 });
 
 /**
@@ -99,6 +113,9 @@ const RoomData = function(data, socket) {
       BroadCast(wss.clients, false, socket, JSON.stringify({
         l : 'room', t : 'roomDel', v : socket.game
       }));
+      console.log(
+        `client ${socket.id} quit room. name : ${socket.game}`
+      );
       gameList[socket.game].forEach(client => {
         if(client.id != socket.id) client.game = undefined;
       });
