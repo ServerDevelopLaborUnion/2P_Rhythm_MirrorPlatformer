@@ -15,9 +15,8 @@ namespace Main
 
         public void RequestCreate()
         {
-            Client.Instance.SendMessages("room", "create", field.text);
+            Client.Instance.SendMessages("room", "createReq", field.text);
             DataManager.Instance.ud.isHost = true;
-            SceneLoader.Instance.LoadScene("INGAME");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Main
     {
         private Button button = null;
         private TextMeshProUGUI infoText = null;
-        private string roomName = null;
+        public string roomName { get; set; }
 
         private void Awake()
         {
@@ -25,9 +25,8 @@ namespace Main
 
         public void EnterRoom()
         {
-            Client.Instance.SendMessages("room", "join", roomName);
+            Client.Instance.SendMessages("room", "joinReq", roomName);
             DataManager.Instance.ud.isHost = false;
-            SceneLoader.Instance.LoadScene("INGAME");
         }
 
         public override void Reset()

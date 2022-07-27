@@ -7,9 +7,7 @@ namespace Main
     {
         public void RequestQuit()
         {
-            Client.Instance.SendMessages("room", "quit", "");
-            SceneLoader.Instance.LoadScene("INTRO");
-            TextSpawner.Instance.SpawnText("Disconnecting With Room");
+            Client.Instance.SendMessages("room", "quitReq", "");
         }
     }
 }

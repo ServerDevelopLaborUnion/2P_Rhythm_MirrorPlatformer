@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
@@ -10,6 +11,7 @@ namespace Main
         [SerializeField] PoolableMono roomUnit;
         private Transform canvas = null;
         private Transform content = null;
+        private List<string> roomList = new List<string>();
 
         private void Awake()
         {
@@ -18,6 +20,25 @@ namespace Main
 
             canvas = GameObject.Find("Canvas").transform;
             content = canvas.Find("MainPanel/Second/Panels/RoomPanel/ScrollView/Viewport/Content");
+        }
+
+        public void RoomUpdate()
+        {
+            foreach(RoomUnit unit in content.GetComponentsInChildren<RoomUnit>() )
+                PoolManager.Instance.Push(unit);
+
+            foreach(string u in roomList)
+                CreateRoom(u);
+        }
+
+        public void AddRoom(string Name)
+        {
+            roomList.Add(Name);
+        }
+
+        public void RemoveRoom(string Name)
+        {
+            roomList.Remove(Name);
         }
 
         public void CreateRoom(string RoomName)

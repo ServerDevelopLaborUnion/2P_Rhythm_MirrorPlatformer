@@ -80,19 +80,40 @@ namespace Main
             switch(p.Type)
             {
                 case "create":
-                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
+                    actions.Enqueue(() => RoomManager.Instance.AddRoom(p.Value) );
+                    break;
+                case "createErr":
+                    actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
+                    break;
+                case "createRes":
+                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INGAME") );
                     break;
                 case "join":
                     actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
                     break;
+                case "joinErr":
+                    actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
+                    break;
+                case "joinRes":
+                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INGAME") );
+                    break;
                 case "quit":
                     actions.Enqueue(() => {
                         SceneLoader.Instance.LoadScene("INTRO");
-                        TextSpawner.Instance.SpawnText("Host is Disconnected With Room");
+                        TextSpawner.Instance.SpawnText("Partner is Disconnected With Room");
+                    });
+                    break;
+                case "quitRes":
+                    actions.Enqueue(() => {
+                        SceneLoader.Instance.LoadScene("INTRO");
+                        TextSpawner.Instance.SpawnText("Disconnecting With Room");
                     });
                     break;
                 case "init":
-                    actions.Enqueue(() => RoomManager.Instance.CreateRoom(p.Value) );
+                    actions.Enqueue(() => RoomManager.Instance.AddRoom(p.Value) );
+                    break;
+                case "roomDel":
+                    actions.Enqueue(() => RoomManager.Instance.RemoveRoom(p.Value) );
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Type}") );
