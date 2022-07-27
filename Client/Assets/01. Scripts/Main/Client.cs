@@ -132,6 +132,9 @@ namespace Main
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
                     break;
+                case "return":
+                    actions.Enqueue(() => InGameManager.Instance.UnloadStage() );
+                    break;
                 case "dead":
                     actions.Enqueue(() => InGameManager.Instance.currentStage.Reset() );
                     break;

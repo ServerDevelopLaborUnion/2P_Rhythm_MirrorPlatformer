@@ -40,9 +40,26 @@ namespace Main
             Client.Instance.SendMessages("game", "start", stageIndex);
         }
 
+        public void BackToMenu()
+        {
+            Reset();
+
+            Client.Instance.SendMessages("game", "return", "");
+        }
+
         public void UnlockStage(string name)
         {
             DataManager.Instance.sd.unlockedStage.Add(name);
+        }
+
+        public void UnloadStage()
+        {
+            Destroy(currentStage);
+            if(DataManager.Instance.ud.isHost)
+                StagePanel.SetActive(true);
+            
+            if (!DataManager.Instance.ud.isHost)
+                LoadingPanel.SetActive(true);
         }
 
         public void LoadStage(string index)
