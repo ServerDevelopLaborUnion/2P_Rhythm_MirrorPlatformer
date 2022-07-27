@@ -11,9 +11,10 @@ wss.on('listening', () => {
 wss.on('connection', (client, req) => {
   client.id = idcnt++;
   Object.keys(gameList).forEach(name => {
-    client.send(JSON.stringify({
-      l : 'room', t : 'init', v : name
-    }));
+    if(gameList[name] != undefined) 
+      client.send(JSON.stringify({
+        l : 'room', t : 'init', v : name
+      }));
   });
   client.on('message', msg => {
     const Data = ObjectParser(msg.toString());
@@ -38,6 +39,9 @@ wss.on('connection', (client, req) => {
           socket.game = undefined;
         }
       });
+      BroadCast(wss.clients, true, client, JSON.stringify({
+        l : 'room', t : 'roomDel', v : client.game
+      }));
       gameList[client.game] = undefined;
     }
   })
@@ -110,7 +114,7 @@ const RoomData = function(data, socket) {
         l : 'room', t : 'quit', v : socket.game
       }));
       socket.send(JSON.stringify({ l : 'room', t : 'quitRes', v : socket.game }));
-      BroadCast(wss.clients, false, socket, JSON.stringify({
+      BroadCast(wss.clients, true, socket, JSON.stringify({
         l : 'room', t : 'roomDel', v : socket.game
       }));
       console.log(
