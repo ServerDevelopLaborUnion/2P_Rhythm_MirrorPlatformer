@@ -396,7 +396,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicName: 
-  Ortho: 7
+  nextStage: 1-2
+  endPoint: 10
 --- !u!1 &7817467411945907705
 GameObject:
   m_ObjectHideFlags: 0

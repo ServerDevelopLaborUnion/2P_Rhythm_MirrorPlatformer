@@ -37,6 +37,12 @@ namespace Main
         {
             Reset();
 
+            if(!DataManager.Instance.sd.unlockedStage.Contains(stageIndex)) 
+            {
+                TextSpawner.Instance.SpawnText("Stage Not Allowed");
+                return;
+            }
+
             Client.Instance.SendMessages("game", "start", stageIndex);
         }
 
@@ -54,7 +60,7 @@ namespace Main
 
         public void UnloadStage()
         {
-            Destroy(currentStage);
+            Destroy(currentStage.gameObject);
             if(DataManager.Instance.ud.isHost)
                 StagePanel.SetActive(true);
             
@@ -67,8 +73,8 @@ namespace Main
             StagePanel.SetActive(false);
             LoadingPanel.SetActive(false);
 
-            currentStage = Resources.Load<Stage>($"Stages/Stage{index}");
-            Instantiate(currentStage, Vector3.zero, Quaternion.identity);
+            Stage stage = Resources.Load<Stage>($"Stages/Stage{index}");
+            currentStage = Instantiate(stage, Vector3.zero, Quaternion.identity);
             currentStage.Init();
 
             mainVCam.m_Lens.OrthographicSize = currentStage.Ortho;
