@@ -18,8 +18,8 @@ namespace Core
 
             string sdJSON = PlayerPrefs.GetString("sdJSON", "");
             string udJSON = PlayerPrefs.GetString("udJSON", "");
-            
-            if(sdJSON == "") sd = new StageData() { unlockedStage = new List<string>(), };
+
+            if (sdJSON == "") { sd = new StageData() { unlockedStage = new List<string>(), }; sd.unlockedStage.Add("1-1"); }
             else sd = JsonConvert.DeserializeObject<StageData>(sdJSON);
 
             if(udJSON == "") ud = new UserData() { isHost = false, };

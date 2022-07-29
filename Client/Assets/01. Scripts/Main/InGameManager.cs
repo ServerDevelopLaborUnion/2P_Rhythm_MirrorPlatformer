@@ -13,6 +13,7 @@ namespace Main
         public GameObject StagePanel { get; set; } = null;
         public GameObject LoadingPanel { get; set; } = null;
         public GameObject WaitingPanel { get; set; } = null;
+        public GameObject ClearPanel { get; set; } = null;
         public Stage currentStage { get; set; }
 
         private void Awake()
@@ -22,9 +23,10 @@ namespace Main
 
             mainVCam = GameObject.Find("MainVCam").GetComponent<CinemachineVirtualCamera>();
             canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            StagePanel = canvas.transform.Find("Panels/StagePanel").gameObject;
+            StagePanel = canvas.transform.Find("Panels/ThemePanel").gameObject;
             LoadingPanel = canvas.transform.Find("Panels/LoadingPanel").gameObject;
             WaitingPanel = canvas.transform.Find("Panels/WaitingPanel").gameObject;
+            ClearPanel = canvas.transform.Find("Panels/ClearPanel").gameObject;
 
             if(DataManager.Instance.ud.isHost)
                 LoadingPanel.SetActive(false);
@@ -53,18 +55,23 @@ namespace Main
             Client.Instance.SendMessages("game", "return", "");
         }
 
-        public void UnlockStage(string name)
+        public void StageClear()
         {
-            DataManager.Instance.sd.unlockedStage.Add(name);
+            ClearPanel.SetActive(true);
+
+            UnloadStage();
+
+            DataManager.Instance.sd.unlockedStage.Add(currentStage.NextStage);
+            TextSpawner.Instance.SpawnText($"{currentStage.NextStage} Unlocked!");
         }
 
         public void UnloadStage()
         {
             Destroy(currentStage.gameObject);
+           
             if(DataManager.Instance.ud.isHost)
                 StagePanel.SetActive(true);
-            
-            if (!DataManager.Instance.ud.isHost)
+            else
                 LoadingPanel.SetActive(true);
         }
 

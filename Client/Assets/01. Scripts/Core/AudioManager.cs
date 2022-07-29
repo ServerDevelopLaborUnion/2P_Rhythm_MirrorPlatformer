@@ -39,7 +39,7 @@ namespace Core
             PlayerPrefs.SetFloat("EFFECT", EffectSource.volume);
         }
 
-        public void PlayeBGM(string clipName)
+        public void PlayBGM(string clipName)
         {
             BGMSource.clip = clips[clipName];
             BGMSource.Play();
@@ -51,9 +51,9 @@ namespace Core
             EffectSource.Play();
         }
 
-        public void Pause()
+        public void PauseBGM()
         {
-            EffectSource.Pause();
+            BGMSource.Pause();
         }
     }
 }
