@@ -1,3 +1,4 @@
+const { CLOSED } = require('ws');
 const ws = require('ws');
 const wss = new ws.Server({port:3000});
 
@@ -53,7 +54,23 @@ wss.on('connection', (client, req) => {
  */
 const GameData = function(data, socket) {
   if(socket.game == undefined) return;
-  BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
+  if(data.t == 'input') {
+    BroadCast(gameList[socket.game], false, socket, JSON.stringify(data));
+  }
+  else if(data.t == 'finish') {
+    socket.finish = true;
+    gameList[socket.game].forEach(client => {
+      if((socket.id != client.id) && (client.finish)) {
+        BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
+        gameList[socket.game].forEach(soc => {
+          soc.finish = false;
+        });
+      }
+    });
+  }
+  else {
+    BroadCast(socket.game, true, socket, JSON.stringify(data));
+  }
 }
 
 /**
