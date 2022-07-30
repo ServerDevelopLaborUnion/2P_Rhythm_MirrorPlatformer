@@ -11,18 +11,14 @@ namespace Main
         {
             Idle = 0,
             Jump = 1,
+            Hold = 2,
         }
 
         public State state = State.Idle;
 
-        public void SetJump()
+        public void SetState(State state)
         {
-            state = State.Jump;
-        }
-
-        public void SetIdle()
-        {
-            state = State.Idle;
+            this.state = state;
         }
     }
 }

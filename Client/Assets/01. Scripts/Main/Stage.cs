@@ -26,7 +26,7 @@ namespace Main
         public IEnumerator FinishRace()
         {
             yield return new WaitUntil(() => Mathf.Abs(map.position.x) >= endPoint);
-            Client.Instance.SendMessages("game", "finish", "");
+            Client.Instance.SendMessages("game", "clear", "");
             //AudioManager.Instance.PauseBGM();
             map.GetComponent<MoveTo>().enabled = false;
         }

@@ -132,7 +132,7 @@ namespace Main
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
                     break;
-                case "clear":
+                case "finish":
                     actions.Enqueue(() => InGameManager.Instance.StageClear() );
                     break;
                 case "return":
@@ -152,11 +152,14 @@ namespace Main
             switch (p.Value)
             {
 
-                case "slide":
-                    actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Slide));
+                case "holdS":
+                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldS));
+                    break;
+                case "holdD":
+                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldD));
                     break;
                 case "jump":
-                    actions.Enqueue(() => P2Control.Instance.SetEvent(P2Control.Events.Jump));
+                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.Jump));
                     break;
                 case "error":
                     actions.Enqueue(() => Debug.Log($"{p.Value}") );
