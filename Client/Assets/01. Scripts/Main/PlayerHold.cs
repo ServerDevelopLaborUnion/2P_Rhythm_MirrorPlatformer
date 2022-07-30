@@ -27,6 +27,7 @@ namespace Main
         {
             if(coroutine == null || !rb2d.constraints.HasFlag(RigidbodyConstraints2D.FreezePositionY)) return;
             StopCoroutine(coroutine);
+            rb2d.velocity.Set(0, Mathf.Epsilon);
             rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
             callBack?.Invoke();
         }
@@ -42,7 +43,7 @@ namespace Main
                 yield return null;
             }
 
-            StopHold(() => Client.Instance.SendMessages("game", "input", "holdD"));
+            DoHold();
             yield return null;
         }
     }
