@@ -18,24 +18,24 @@ namespace Main
 
         public void DoHold(Action callBack = null)
         {
-            coroutine = Hold(callBack);
+            coroutine = Hold();
             callBack?.Invoke();
-            rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
+            //rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
             StartCoroutine(coroutine);
         }
 
         public void StopHold(Action callBack = null)
         {
             if(coroutine == null) return;
-            rb2d.constraints = RigidbodyConstraints2D.None;
+            //rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
             StopCoroutine(coroutine);
+            rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
             callBack?.Invoke();
         }
 
-        private IEnumerator Hold(Action callBack = null)
+        private IEnumerator Hold()
         {
-            callBack?.Invoke();
-            rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
+            rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
             float currentTime = 0;
 
             while(currentTime <= duration)
@@ -43,6 +43,8 @@ namespace Main
                 currentTime += Time.deltaTime;
                 yield return null;
             }
+
+            rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
         }
     }
 }
