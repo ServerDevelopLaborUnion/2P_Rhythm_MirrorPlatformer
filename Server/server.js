@@ -27,6 +27,9 @@ wss.on('connection', (client, req) => {
       case 'game':
         GameData(Data, client);
         break;
+      case 'dev':
+        client.send(JSON.stringify(gameList));
+        break;
     }
   });
   client.on('close', () => {
