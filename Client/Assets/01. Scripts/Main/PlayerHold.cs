@@ -28,7 +28,7 @@ namespace Main
             if(coroutine == null || !rb2d.constraints.HasFlag(RigidbodyConstraints2D.FreezePositionY)) return;
             StopCoroutine(coroutine);
             rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
-            rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Epsilon);
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0.1f);
             callBack?.Invoke();
         }
 
@@ -43,7 +43,7 @@ namespace Main
                 yield return null;
             }
 
-            DoHold();
+            StopHold();
             yield return null;
         }
     }
