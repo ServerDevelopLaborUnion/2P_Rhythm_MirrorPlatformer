@@ -42,7 +42,8 @@ namespace Main
                 yield return null;
             }
 
-            rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+            StopHold(() => Client.Instance.SendMessages("game", "input", "holdD"));
+            yield return null;
         }
     }
 }
