@@ -35,15 +35,15 @@ namespace Main
         private IEnumerator Hold()
         {
             rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
-            float currentTime = 0;
+            // float currentTime = 0;
 
-            while(currentTime <= duration)
-            {
-                currentTime += Time.deltaTime;
-                yield return null;
-            }
+            // while(currentTime <= duration)
+            // {
+            //     currentTime += Time.deltaTime;
+            //     yield return null;
+            // }
 
-            DoHold();
+            // DoHold();
             yield return null;
         }
     }
