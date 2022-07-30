@@ -69,7 +69,7 @@ const GameData = function(data, socket) {
     });
   }
   else {
-    BroadCast(socket.game, true, socket, JSON.stringify(data));
+    BroadCast(gameList[socket.game], true, socket, JSON.stringify(data));
   }
 }
 
