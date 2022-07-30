@@ -27,23 +27,23 @@ namespace Main
         {
             if(coroutine == null || !rb2d.constraints.HasFlag(RigidbodyConstraints2D.FreezePositionY)) return;
             StopCoroutine(coroutine);
-            rb2d.velocity.Set(0, Mathf.Epsilon);
             rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+            rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Epsilon);
             callBack?.Invoke();
         }
 
         private IEnumerator Hold()
         {
             rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
-            // float currentTime = 0;
+            float currentTime = 0;
 
-            // while(currentTime <= duration)
-            // {
-            //     currentTime += Time.deltaTime;
-            //     yield return null;
-            // }
+            while(currentTime <= duration)
+            {
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
 
-            // DoHold();
+            DoHold();
             yield return null;
         }
     }
