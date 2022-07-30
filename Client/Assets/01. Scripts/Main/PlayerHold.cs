@@ -20,14 +20,12 @@ namespace Main
         {
             coroutine = Hold();
             callBack?.Invoke();
-            //rb2d.constraints |= RigidbodyConstraints2D.FreezePositionY;
             StartCoroutine(coroutine);
         }
 
         public void StopHold(Action callBack = null)
         {
-            if(coroutine == null) return;
-            //rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+            if(coroutine == null || !rb2d.constraints.HasFlag(RigidbodyConstraints2D.FreezePositionY)) return;
             StopCoroutine(coroutine);
             rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
             callBack?.Invoke();
