@@ -84,7 +84,7 @@ const RoomData = function(data, socket) {
   switch(data.t) {
     case 'createReq':
       try {
-        if(gameList[data.v] != undefined)
+        if((gameList[data.v] != undefined) || (data.v == "") || (data.v == null))
           throw new Error('Failed Creating Room');
         gameList[data.v] = [];
         gameList[data.v].push(socket);
