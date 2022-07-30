@@ -6,8 +6,10 @@ namespace Main
 {
     public class PlayerHold : MonoBehaviour
     {
+        [SerializeField] float duration = 1f;
         private IEnumerator coroutine = null;
         private Rigidbody2D rb2d = null;
+
 
         private void Awake()
         {
@@ -16,27 +18,29 @@ namespace Main
 
         public void DoHold(Action callBack = null)
         {
-            //coroutine = Hold(callBack);
+            coroutine = Hold(callBack);
             callBack?.Invoke();
             rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
-            //StartCoroutine(coroutine);
+            StartCoroutine(coroutine);
         }
 
         public void StopHold(Action callBack = null)
         {
-            //if(coroutine == null) return;
+            if(coroutine == null) return;
             rb2d.constraints = RigidbodyConstraints2D.None;
-            //StopCoroutine(coroutine);
+            StopCoroutine(coroutine);
             callBack?.Invoke();
         }
 
         private IEnumerator Hold(Action callBack = null)
         {
             callBack?.Invoke();
+            rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
+            float currentTime = 0;
 
-            while(true)
+            while(currentTime <= duration)
             {
-                rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
+                currentTime += Time.deltaTime;
                 yield return null;
             }
         }

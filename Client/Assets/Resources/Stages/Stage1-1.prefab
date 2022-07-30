@@ -412,7 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicName: 
   nextStage: 1-2
-  endPoint: 10
+  endPoint: 100
   map: {fileID: 0}
   P1: {fileID: 0}
   P2: {fileID: 0}
