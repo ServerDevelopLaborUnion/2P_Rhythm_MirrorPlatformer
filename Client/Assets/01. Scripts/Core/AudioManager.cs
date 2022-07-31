@@ -41,12 +41,16 @@ namespace Core
 
         public void PlayBGM(string clipName)
         {
+            if(!clips.ContainsKey(clipName)) return;
+
             BGMSource.clip = clips[clipName];
             BGMSource.Play();
         }
 
         public void PlayClip(string clipName)
         {
+            if(!clips.ContainsKey(clipName)) return;
+
             EffectSource.clip = clips[clipName];
             EffectSource.Play();
         }
