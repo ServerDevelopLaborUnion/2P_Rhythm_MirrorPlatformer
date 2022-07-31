@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0fb131b7ffe224f833113a36878972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicName: 
+  musicName: 3-1
   nextStage: 3-2
   endPoint: 315
   ortho: 10
@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 7350053024368767678}
   - component: {fileID: 7350053024368767679}
   - component: {fileID: 7350053024368767676}
+  - component: {fileID: 4612889843680855650}
   - component: {fileID: 7350053024368767677}
   - component: {fileID: 7350053024368767674}
   m_Layer: 8
@@ -189,6 +190,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
+--- !u!114 &4612889843680855650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7350053024368767672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614a50d75c09aa14daa883ac394d936c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.7
 --- !u!114 &7350053024368767677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11525,6 +11539,7 @@ GameObject:
   - component: {fileID: 7350053024857815121}
   - component: {fileID: 7350053024857815118}
   - component: {fileID: 7350053024857815119}
+  - component: {fileID: 5863045736933282888}
   m_Layer: 7
   m_Name: Player1
   m_TagString: Untagged
@@ -11683,6 +11698,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
+--- !u!114 &5863045736933282888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7350053024857815117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614a50d75c09aa14daa883ac394d936c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.7
 --- !u!1 &7350053025241116373
 GameObject:
   m_ObjectHideFlags: 0
