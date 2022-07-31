@@ -20,10 +20,10 @@ namespace Core
             string udJSON = PlayerPrefs.GetString("udJSON", "");
 
             if (sdJSON == "") { sd = new StageData() { unlockedStage = new List<string>(), }; sd.unlockedStage.Add("1-1"); }
-            else sd = JsonConvert.DeserializeObject<StageData>(sdJSON);
+            else sd = JsonUtility.FromJson<StageData>(sdJSON);
 
-            if(udJSON == "") ud = new UserData() { isHost = false, };
-            else ud = JsonConvert.DeserializeObject<UserData>(udJSON);
+            if(udJSON == "") ud = new UserData() { isHost = false, skin = null, };
+            else ud = JsonUtility.FromJson<UserData>(udJSON);
         }
 
         private void Update()
@@ -39,14 +39,14 @@ namespace Core
 
         private void SaveStageData()
         {
-            string JSON = JsonConvert.SerializeObject(sd);
+            string JSON = JsonUtility.ToJson(sd);
             PlayerPrefs.SetString("sdJSON", JSON);
         }
 
         private void SaveUserData()
         {
             ud.isHost = false;
-            string JSON = JsonConvert.SerializeObject(ud);
+            string JSON = JsonUtility.ToJson(ud);
             PlayerPrefs.SetString("udJSON", JSON);
         }
 

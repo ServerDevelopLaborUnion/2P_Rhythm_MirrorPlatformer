@@ -37,6 +37,8 @@ namespace Main
         public void Reset()
         {
             AudioManager.Instance.PlayBGM(musicName);
+            P1.localPosition = new Vector3(P1.localPosition.x, 2);
+            P2.localPosition = new Vector3(P2.localPosition.x, -2);
             map.localPosition = Vector3.zero;
         }
     }

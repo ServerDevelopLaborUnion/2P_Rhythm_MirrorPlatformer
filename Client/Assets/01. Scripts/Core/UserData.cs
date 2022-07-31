@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Core
 {
@@ -6,5 +7,6 @@ namespace Core
     public class UserData
     {
         public bool isHost;
+        public Sprite skin;
     }
 }

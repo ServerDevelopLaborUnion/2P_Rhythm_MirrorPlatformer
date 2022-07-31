@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 
 namespace Main
@@ -6,6 +7,7 @@ namespace Main
     {
         [SerializeField] LayerMask groundLayer, obstacleLayer;
         [SerializeField] bool isJump = true, isHold = true;
+        private SpriteRenderer spR = null;
         private PlayerJump jump = null;
         private PlayerHold hold = null;
 
@@ -13,6 +15,9 @@ namespace Main
         {
             jump = GetComponent<PlayerJump>();
             hold = GetComponent<PlayerHold>();
+            spR = GetComponent<SpriteRenderer>();
+
+            spR.sprite = DataManager.Instance.ud.skin;
         }
         
         private void Update()
