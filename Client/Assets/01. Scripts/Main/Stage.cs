@@ -30,13 +30,13 @@ namespace Main
         {
             yield return new WaitUntil(() => Mathf.Abs(map.position.x) >= endPoint);
             Client.Instance.SendMessages("game", "clear", "");
-            //AudioManager.Instance.PauseBGM();
+            AudioManager.Instance.PauseBGM();
             map.GetComponent<MoveTo>().enabled = false;
         }
 
         public void Reset()
         {
-            //AudioManager.Instance.PlayBGM(musicName);
+            AudioManager.Instance.PlayBGM(musicName);
             map.localPosition = Vector3.zero;
         }
     }

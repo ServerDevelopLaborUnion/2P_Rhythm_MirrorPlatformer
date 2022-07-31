@@ -61,7 +61,8 @@ namespace Main
 
             UnloadStage();
 
-            DataManager.Instance.sd.unlockedStage.Add(currentStage.NextStage);
+            if(!DataManager.Instance.sd.unlockedStage.Contains(currentStage.NextStage))
+                DataManager.Instance.sd.unlockedStage.Add(currentStage.NextStage);
             TextSpawner.Instance.SpawnText($"{currentStage.NextStage} Unlocked!");
         }
 
