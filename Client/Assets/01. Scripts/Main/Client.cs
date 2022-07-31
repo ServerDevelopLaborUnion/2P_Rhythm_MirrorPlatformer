@@ -99,12 +99,14 @@ namespace Main
                     break;
                 case "quit":
                     actions.Enqueue(() => {
+                        AudioManager.Instance.PauseBGM();
                         SceneLoader.Instance.LoadScene("INTRO");
                         TextSpawner.Instance.SpawnText("Partner is Disconnected With Room");
                     });
                     break;
                 case "quitRes":
                     actions.Enqueue(() => {
+                        AudioManager.Instance.PauseBGM();
                         SceneLoader.Instance.LoadScene("INTRO");
                         TextSpawner.Instance.SpawnText("Disconnecting With Room");
                     });

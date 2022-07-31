@@ -68,6 +68,8 @@ namespace Main
 
         public void UnloadStage()
         {
+            AudioManager.Instance.PauseBGM();
+
             Destroy(currentStage.gameObject);
            
             if(DataManager.Instance.ud.isHost)
