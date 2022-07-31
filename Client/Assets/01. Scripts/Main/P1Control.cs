@@ -40,8 +40,8 @@ namespace Main
             RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, transform.localScale.x / 2 + 0.05f, groundLayer);
             RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, transform.localScale.x / 2 + 0.05f, groundLayer);
 
-            bool isCrash = Physics2D.OverlapCircle(transform.position, transform.localScale.x / 2, obstacleLayer);
-            
+            bool isCrash = Physics2D.OverlapCircle(transform.position, transform.localScale.x / 2 + 0.05f, obstacleLayer);
+
             if(hitRight || hitUp || isCrash)
                 Client.Instance.SendMessages("game", "dead", "");
         }
