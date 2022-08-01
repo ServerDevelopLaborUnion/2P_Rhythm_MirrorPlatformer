@@ -164,7 +164,10 @@ namespace Main
                     actions.Enqueue(() => InGameManager.Instance.StageClear() );
                     break;
                 case "return":
-                    actions.Enqueue(() => InGameManager.Instance.UnloadStage() );
+                    actions.Enqueue(() => {
+                        if(InGameManager.Instance.ClearPanel.activeSelf) InGameManager.Instance.ClearPanel.SetActive(false);
+                        InGameManager.Instance.UnloadStage(); 
+                    });
                     break;
                 case "dead":
                     actions.Enqueue(() => InGameManager.Instance.currentStage.Reset() );
