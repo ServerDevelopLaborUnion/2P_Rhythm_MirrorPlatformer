@@ -23,9 +23,8 @@ namespace Main
             else if(RoomManager.Instance.RoomList.ContainsKey(nameField.text)) { TextSpawner.Instance.SpawnText("Room With Current Name Already Exists"); return; }
 
             Client.RoomPacket rp = new Client.RoomPacket(nameField.text, pwField.text);
-            string JSON = JsonConvert.SerializeObject(rp);
 
-            Client.Instance.SendMessages("room", "createReq", JSON);
+            Client.Instance.SendMessages("room", "createReq", rp);
         }
     }
 }

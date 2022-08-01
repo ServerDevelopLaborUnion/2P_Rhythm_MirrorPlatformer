@@ -31,6 +31,20 @@ namespace Main
             }
         }
 
+        public class ObjPacket
+        {
+            [JsonProperty("l")] public string Locate;
+            [JsonProperty("t")] public string Type;
+            [JsonProperty("v")] public object Value;
+
+            public ObjPacket(string locate, string type, object value)
+            {
+                Locate = locate;
+                Type = type;
+                Value = value;
+            }
+        }
+
         public class RoomPacket
         {
             [JsonProperty("n")] public string Name;
@@ -194,6 +208,15 @@ namespace Main
             if(!server.IsAlive) { Debug.Log($"Server is Not Connected"); return; }
 
             Packet packet = new Packet(locate, type, value);
+            string JSON = JsonConvert.SerializeObject(packet);
+            server.Send(JSON);
+        }
+
+        public void SendMessages(string locate, string type, object value)
+        {
+            if(!server.IsAlive) { Debug.Log($"Server is Not Connected"); return; }
+
+            ObjPacket packet = new ObjPacket(locate, type, value);
             string JSON = JsonConvert.SerializeObject(packet);
             server.Send(JSON);
         }
