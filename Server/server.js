@@ -1,4 +1,3 @@
-const { CLOSED } = require('ws');
 const ws = require('ws');
 const wss = new ws.Server({port:3000});
 
