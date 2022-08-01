@@ -1,3 +1,4 @@
+const { CLOSED } = require('ws');
 const ws = require('ws');
 const wss = new ws.Server({port:3000});
 
@@ -13,7 +14,7 @@ wss.on('connection', (client, req) => {
   Object.keys(gameList).forEach(name => {
     if(gameList[name] != undefined) 
       client.send(JSON.stringify({
-        l : 'room', t : 'init', v : name
+        l : 'room', t : 'create', v : { n : name, p : gameList[name][0].pwd }
       }));
   });
   client.on('message', msg => {
@@ -83,55 +84,54 @@ const RoomData = function(data, socket) {
   switch(data.t) {
     case 'createReq':
       try {
-        if((gameList[data.v.n] != undefined) || (data.v.n == "") || (data.v.n == null) || (data.v.length > 6) || (data.v.p == null) || (data.v.p == "") || (data.v.p.length > 5))
+        if((gameList[data.v] != undefined) || (data.v == "") || (data.v == null))
           throw new Error('Failed Creating Room');
         gameList[data.v.n] = [];
         gameList[data.v.n].push(socket);
         socket.game = data.v.n;
-        socket.pwd = data.v.p
+        socket.pwd  = data.v.p;
         console.log(
           `client ${socket.id} create room. name : ${socket.game}`
         );
         BroadCast(wss.clients, false, socket, JSON.stringify({
-          l : 'room', t : 'create', v : data.v.n
+          l : 'room', t : 'create', v : data.v
         }));
         socket.send(JSON.stringify({
-          l : 'room', t : 'createRes', v : data.v.n
+          l : 'room', t : 'createRes', v : data.v
         }));
       }
       catch(err) {
         socket.send(JSON.stringify({
-          l : 'room', t : 'createErr', v : err.toString()
+          l : 'room', t : 'err', v : err.toString()
         }));
       }
       break;
     case 'joinReq':
       try {
-        if(gameList[data.v.n] == undefined) 
+        if(gameList[data.v] == undefined) 
           throw new Error('Game not found');
-        else if(gameList[data.v.n].length >= 2)
+        else if(gameList[data.v].length >= 2)
           throw new Error('The room is full');
-        else if(gameList[data.v.n][0].pwd != data.v.p)
-          throw new Error('Password Incorrect');
-        gameList[data.v.n].push(socket);
-        socket.game = data.v.n;
+        gameList[data.v].push(socket);
+        socket.game = data.v;
         console.log(
           `client ${socket.id} join room. name : ${socket.game}`
         );
-        BroadCast(gameList[data.v.n], false, socket, JSON.stringify({
+        BroadCast(gameList[data.v], false, socket, JSON.stringify({
           l : 'room', t : 'join', v : socket.id
         }));
         socket.send(JSON.stringify({
-          l : 'room', t : 'joinRes', v : data.v.n
+          l : 'room', t : 'joinRes', v : data.v
         }));
       }
       catch(err) {
         socket.send(JSON.stringify({
-          l : 'room', t : 'joinErr', v : err.toString()
+          l : 'room', t : 'err', v : err.toString()
         }));
       }
       break;
     case 'quitReq':
+      if(socket.game == undefined) return;
       BroadCast(gameList[socket.game], false, socket, JSON.stringify({
         l : 'room', t : 'quit', v : socket.game
       }));
@@ -143,11 +143,11 @@ const RoomData = function(data, socket) {
         `client ${socket.id} quit room. name : ${socket.game}`
       );
       gameList[socket.game].forEach(client => {
+        if(socket.pwd != undefined) socket.pwd = undefined;
         if(client.id != socket.id) client.game = undefined;
       });
       gameList[socket.game] = undefined;
       socket.game = undefined;
-      if(socket.pwd != undefined) socket.pwd = undefined;
       break;
   }
 }
