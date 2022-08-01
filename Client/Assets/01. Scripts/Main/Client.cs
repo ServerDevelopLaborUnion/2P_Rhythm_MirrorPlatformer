@@ -160,7 +160,7 @@ namespace Main
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
                     break;
-                case "finish":
+                case "clear":
                     actions.Enqueue(() => InGameManager.Instance.StageClear() );
                     break;
                 case "return":
