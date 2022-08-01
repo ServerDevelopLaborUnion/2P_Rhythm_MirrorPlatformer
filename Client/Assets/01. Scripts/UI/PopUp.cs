@@ -18,7 +18,8 @@ public class PopUp : Buttons
     public void DoPopDown(RectTransform rt)
     {
         rt.DOScale(Vector3.zero, duration).OnComplete(() => {
-            rt.gameObject.SetActive(true);
+            rt.gameObject.SetActive(false);
+            rt.localScale = Vector3.one;
         });
 
         Reset();
