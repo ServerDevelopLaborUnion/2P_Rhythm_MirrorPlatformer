@@ -1,5 +1,8 @@
 {
     "l" : "room",
-    "t" : "join",
-    "v" : "TestRoom"
+    "t" : "joinReq",
+    "v" : {
+        "n" : "TestRoom",
+        "p" : "1234"
+    }
 }

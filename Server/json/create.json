@@ -1,5 +1,8 @@
 {
     "l" : "room",
-    "t" : "create",
-    "v" : "TestRoom"
+    "t" : "createReq",
+    "v" : {
+        "n" : "TestRoom",
+        "p" : "1234"
+    }
 }

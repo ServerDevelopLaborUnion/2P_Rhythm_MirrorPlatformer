@@ -1,5 +1,5 @@
 {
     "l" : "room",
-    "t" : "quit",
+    "t" : "quitReq",
     "v" : "TestRoom"
 }
