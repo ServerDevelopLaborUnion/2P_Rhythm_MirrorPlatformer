@@ -12,7 +12,7 @@ namespace Main
         private CinemachineVirtualCamera mainVCam = null;
         private Transform canvas = null;
         private Button themeButton = null;
-        private Button returnButton = null;
+        private GameObject returnButton = null;
         public GameObject StagePanel { get; set; } = null;
         public GameObject LoadingPanel { get; set; } = null;
         public GameObject WaitingPanel { get; set; } = null;
@@ -31,7 +31,7 @@ namespace Main
             WaitingPanel = canvas.Find("Panels/WaitingPanel").gameObject;
             ClearPanel = canvas.Find("Panels/ClearPanel").gameObject;
             themeButton = canvas.Find("Bar/ThemeButton").GetComponent<Button>();
-            returnButton = ClearPanel.transform.Find("ReturnButton").GetComponent<Button>();
+            returnButton = ClearPanel.transform.Find("ReturnButton").gameObject;
         }
         private void Start()
         {
@@ -68,8 +68,8 @@ namespace Main
         {
             ClearPanel.SetActive(true);
 
-            if(!DataManager.Instance.ud.isHost) returnButton.gameObject.SetActive(false);
-            else returnButton.gameObject.SetActive(true);
+            if(!DataManager.Instance.ud.isHost) returnButton.SetActive(false);
+            else returnButton.SetActive(true);
 
             if(!DataManager.Instance.sd.unlockedStage.Contains(currentStage.NextStage) && DataManager.Instance.ud.isHost)
                 DataManager.Instance.sd.unlockedStage.Add(currentStage.NextStage);
