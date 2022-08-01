@@ -9,7 +9,7 @@ namespace Main
         public static RoomManager Instance = null;
 
         [SerializeField] PoolableMono roomUnit;
-        public List<string> RoomList { get; set; } = new List<string>();
+        public Dictionary<string, string> RoomList { get; set; } = new Dictionary<string, string>();
 
         private void Awake()
         {
@@ -17,9 +17,9 @@ namespace Main
             if(Instance == null) { Instance = this; DontDestroyOnLoad(transform.root.gameObject); }
         }
 
-        public void AddRoom(string Name)
+        public void AddRoom(string Name, string Password)
         {
-            RoomList.Add(Name);
+            RoomList.Add(Name, Password);
         }
 
         public void RemoveRoom(string Name)

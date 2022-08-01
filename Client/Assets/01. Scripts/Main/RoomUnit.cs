@@ -1,30 +1,52 @@
-using System.Numerics;
+using UnityEngine;
 using Core;
-using UnityEngine.UI;
 using TMPro;
 
 namespace Main
 {
     public class RoomUnit : PoolableMono
     {
-        private Button button = null;
         private TextMeshProUGUI infoText = null;
+        private TMP_InputField field = null;
+        private Transform passwordPanel = null;
         public string roomName { get; set; }
+        public string password { get; set; }
 
         private void Awake()
         {
-            button = GetComponentInChildren<Button>();
+            passwordPanel = transform.Find("PasswordPanel");
             infoText = GetComponentInChildren<TextMeshProUGUI>();
+            field = passwordPanel.GetComponentInChildren<TMP_InputField>();
         }
 
-        public void Init(string RoomName)
+        private void Update()
         {
+            if(Input.GetKeyDown(KeyCode.Escape))
+                CloseFolder();
+        }
+
+        public void Init(string RoomName, string Password)
+        {
+            password = Password;
             roomName = RoomName;
-            infoText.SetText($"NAME : {roomName}");
+            infoText.SetText(roomName);
+        }
+
+        public void CloseFolder()
+        {
+            if(!passwordPanel.gameObject.activeSelf) return;
+
+            passwordPanel.gameObject.SetActive(false);
         }
 
         public void EnterRoom()
         {
+            if(field.text != password)
+            {
+                TextSpawner.Instance.SpawnText("Wrong Password!");
+                return;
+            }
+
             Client.Instance.SendMessages("room", "joinReq", roomName);
             DataManager.Instance.ud.isHost = false;
         }

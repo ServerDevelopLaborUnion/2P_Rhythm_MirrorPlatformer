@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
@@ -21,14 +22,14 @@ namespace Main
             foreach(RoomUnit unit in content.GetComponentsInChildren<RoomUnit>() )
                 PoolManager.Instance.Push(unit);
 
-            foreach(string u in RoomManager.Instance.RoomList)
-                CreateRoom(u);
+            foreach(KeyValuePair<string, string> rp in RoomManager.Instance.RoomList)
+                CreateRoom(rp.Key, rp.Value);
         }
 
-        public void CreateRoom(string RoomName)
+        public void CreateRoom(string RoomName, string Password)
         {
             RoomUnit temp = PoolManager.Instance.Pop(roomUnit) as RoomUnit;
-            temp.Init(RoomName);
+            temp.Init(RoomName, Password);
             temp.transform.SetParent(content);
             temp.transform.localScale = Vector3.one;
             temp.transform.rotation = content.rotation;

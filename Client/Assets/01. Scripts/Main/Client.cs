@@ -31,6 +31,18 @@ namespace Main
             }
         }
 
+        public class RoomPacket
+        {
+            [JsonProperty("n")] public string Name;
+            [JsonProperty("p")] public string Password;
+
+            public RoomPacket(string name, string password)
+            {
+                Name = name;
+                Password = password;
+            }
+        }
+
         private void Awake()
         {
             if(Instance != null) { Debug.Log($"Multiple Client Instance is Running, Destroy This"); Destroy(gameObject); }
@@ -77,22 +89,21 @@ namespace Main
 #region 룸
         private void RoomData(Packet p)
         {
+            RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
+
             switch(p.Type)
             {
                 case "create":
-                    actions.Enqueue(() => RoomManager.Instance.AddRoom(p.Value) );
-                    break;
-                case "createErr":
-                    actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
+                    actions.Enqueue(() => RoomManager.Instance.AddRoom(rp.Name, rp.Password) );
                     break;
                 case "createRes":
-                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INGAME") );
+                    actions.Enqueue(() => {
+                        DataManager.Instance.ud.isHost = true;
+                        SceneLoader.Instance.LoadScene("INGAME");
+                    });
                     break;
                 case "join":
                     actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
-                    break;
-                case "joinErr":
-                    actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
                     break;
                 case "joinRes":
                     actions.Enqueue(() => SceneLoader.Instance.LoadScene("INGAME") );
@@ -112,13 +123,13 @@ namespace Main
                     });
                     break;
                 case "init":
-                    actions.Enqueue(() => RoomManager.Instance.AddRoom(p.Value) );
+                    actions.Enqueue(() => RoomManager.Instance.AddRoom(rp.Name, rp.Password) );
                     break;
                 case "roomDel":
-                    actions.Enqueue(() => RoomManager.Instance.RemoveRoom(p.Value) );
+                    actions.Enqueue(() => RoomManager.Instance.RemoveRoom(rp.Name) );
                     break;
-                case "error":
-                    actions.Enqueue(() => Debug.Log($"{p.Type}") );
+                case "err":
+                    actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
                     break;
             }
         }
