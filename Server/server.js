@@ -89,6 +89,7 @@ const RoomData = function(data, socket) {
         gameList[data.v.n].push(socket);
         socket.game = data.v.n;
         socket.pwd  = data.v.p;
+        console.log(JSON.stringify(gameList));
         console.log(
           `client ${socket.id} create room. name : ${socket.game}`
         );
