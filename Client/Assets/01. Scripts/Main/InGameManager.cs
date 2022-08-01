@@ -76,6 +76,8 @@ namespace Main
         public void UnloadStage()
         {
             themeButton.interactable = false;
+
+            mainVCam.m_Lens.OrthographicSize = 7;
             
             AudioManager.Instance.PauseBGM();
 
