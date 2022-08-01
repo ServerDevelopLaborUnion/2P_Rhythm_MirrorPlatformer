@@ -7,6 +7,7 @@ namespace Main
 {
     public class CreateRoom : MonoBehaviour
     {
+        [SerializeField] int nameL = 10, pwL = 5;
         private TMP_InputField nameField = null, pwField = null;
 
         private void Awake()
@@ -17,8 +18,8 @@ namespace Main
 
         public void RequestCreate()
         {
-            if(nameField.text.Length == 0 || nameField.text.Length > 11) { TextSpawner.Instance.SpawnText("Enter Between 1 and 10 Characters of Name!"); return; }
-            else if(pwField.text.Length == 0 || pwField.text.Length > 6) { TextSpawner.Instance.SpawnText("Enter Between 1 and 5 Characters of Password!"); return; }
+            if(nameField.text.Length == 0 || nameField.text.Length > nameL) { TextSpawner.Instance.SpawnText($"Enter Between 1 and {nameL} Characters of Name!"); return; }
+            else if(pwField.text.Length == 0 || pwField.text.Length > pwL) { TextSpawner.Instance.SpawnText($"Enter Between 1 and {pwL} Characters of Password!"); return; }
             else if(RoomManager.Instance.RoomList.ContainsKey(nameField.text)) { TextSpawner.Instance.SpawnText("Room With Current Name Already Exists"); return; }
 
             Client.RoomPacket rp = new Client.RoomPacket(nameField.text, pwField.text);

@@ -48,7 +48,6 @@ namespace Main
             }
 
             Client.Instance.SendMessages("room", "joinReq", roomName);
-            DataManager.Instance.ud.isHost = false;
         }
 
         public override void Reset()

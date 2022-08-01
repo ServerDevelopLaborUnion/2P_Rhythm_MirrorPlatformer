@@ -107,7 +107,10 @@ namespace Main
                     actions.Enqueue(() => InGameManager.Instance.WaitingPanel.SetActive(false) );
                     break;
                 case "joinRes":
-                    actions.Enqueue(() => SceneLoader.Instance.LoadScene("INGAME") );
+                    actions.Enqueue(() => {
+                        DataManager.Instance.ud.isHost = false;
+                        SceneLoader.Instance.LoadScene("INGAME"); 
+                    });
                     break;
                 case "quit":
                     actions.Enqueue(() => {
@@ -122,12 +125,6 @@ namespace Main
                         SceneLoader.Instance.LoadScene("INTRO");
                         TextSpawner.Instance.SpawnText("Disconnecting With Room");
                     });
-                    break;
-                case "init":
-                    actions.Enqueue(() => {
-                        RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
-                        RoomManager.Instance.AddRoom(rp.Name, rp.Password);
-                        });
                     break;
                 case "roomDel":
                     actions.Enqueue(() => RoomManager.Instance.RemoveRoom(p.Value) );
@@ -168,7 +165,6 @@ namespace Main
         {
             switch (p.Value)
             {
-
                 case "holdS":
                     actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldS));
                     break;
