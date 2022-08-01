@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Core;
 
-public class QuitButton : MonoBehaviour
+public class QuitButton : Buttons
 {
     public void DoQuit()
     {
+        Reset();
         Application.Quit();
     }
 }

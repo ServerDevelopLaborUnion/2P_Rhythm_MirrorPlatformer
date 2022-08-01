@@ -5,7 +5,7 @@ using Core;
 
 namespace Main
 {
-    public class CreateRoom : MonoBehaviour
+    public class CreateRoom : Buttons
     {
         [SerializeField] int nameL = 10, pwL = 5;
         private TMP_InputField nameField = null, pwField = null;
@@ -18,6 +18,8 @@ namespace Main
 
         public void RequestCreate()
         {
+            //Reset();
+
             if(nameField.text.Length == 0 || nameField.text.Length > nameL) { TextSpawner.Instance.SpawnText($"Enter Between 1 and {nameL} Characters of Name!"); return; }
             else if(pwField.text.Length == 0 || pwField.text.Length > pwL) { TextSpawner.Instance.SpawnText($"Enter Between 1 and {pwL} Characters of Password!"); return; }
             else if(RoomManager.Instance.RoomList.ContainsKey(nameField.text)) { TextSpawner.Instance.SpawnText("Room With Current Name Already Exists"); return; }

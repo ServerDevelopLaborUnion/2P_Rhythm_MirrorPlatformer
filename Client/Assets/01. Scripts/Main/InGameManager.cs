@@ -1,6 +1,7 @@
 using Core;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.UI;
 
 namespace Main
 {
@@ -9,7 +10,8 @@ namespace Main
         public static InGameManager Instance = null;
 
         private CinemachineVirtualCamera mainVCam = null;
-        private Canvas canvas = null;
+        private Transform canvas = null;
+        private Button themeButton = null;
         public GameObject StagePanel { get; set; } = null;
         public GameObject LoadingPanel { get; set; } = null;
         public GameObject WaitingPanel { get; set; } = null;
@@ -22,11 +24,16 @@ namespace Main
             if (Instance == null) Instance = this;
 
             mainVCam = GameObject.Find("MainVCam").GetComponent<CinemachineVirtualCamera>();
-            canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            StagePanel = canvas.transform.Find("Panels/ThemePanel").gameObject;
-            LoadingPanel = canvas.transform.Find("Panels/LoadingPanel").gameObject;
-            WaitingPanel = canvas.transform.Find("Panels/WaitingPanel").gameObject;
-            ClearPanel = canvas.transform.Find("Panels/ClearPanel").gameObject;
+            canvas = GameObject.Find("Canvas").transform;
+            StagePanel = canvas.Find("Panels/ThemePanel").gameObject;
+            LoadingPanel = canvas.Find("Panels/LoadingPanel").gameObject;
+            WaitingPanel = canvas.Find("Panels/WaitingPanel").gameObject;
+            ClearPanel = canvas.Find("Panels/ClearPanel").gameObject;
+            themeButton = canvas.Find("Bar/ThemeButton").GetComponent<Button>();
+        }
+        private void Start()
+        {
+            themeButton.interactable = false;
 
             if(DataManager.Instance.ud.isHost)
                 LoadingPanel.SetActive(false);
@@ -68,6 +75,8 @@ namespace Main
 
         public void UnloadStage()
         {
+            themeButton.interactable = false;
+            
             AudioManager.Instance.PauseBGM();
 
             Destroy(currentStage.gameObject);
@@ -80,6 +89,7 @@ namespace Main
 
         public void LoadStage(string index)
         {
+            themeButton.interactable = true;
             StagePanel.SetActive(false);
             LoadingPanel.SetActive(false);
 
