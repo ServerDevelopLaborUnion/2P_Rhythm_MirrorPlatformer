@@ -30,6 +30,7 @@ namespace Main
         {
             yield return new WaitUntil(() => Mathf.Abs(map.position.x) >= endPoint);
             Client.Instance.SendMessages("game", "clear", "");
+            Debug.Log("Message Sended");
             AudioManager.Instance.PauseBGM();
             map.GetComponent<MoveTo>().enabled = false;
         }
