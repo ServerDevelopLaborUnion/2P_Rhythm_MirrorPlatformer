@@ -21,8 +21,8 @@ namespace Main
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.C))
-                SpawnText("Host is Disconnecting With Game");
+            // if (Input.GetKeyDown(KeyCode.C))
+            //     SpawnText("Host is Disconnecting With Game");
         }
 
         public void SpawnText(string content)
