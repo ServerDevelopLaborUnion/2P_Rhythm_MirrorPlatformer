@@ -59,7 +59,7 @@ const GameData = function(data, socket) {
   if(data.t == 'input') {
     BroadCast(gameList[socket.game], false, socket, JSON.stringify(data));
   }
-  else if(data.t == 'finish') {
+  else if(data.t == 'clear') {
     socket.finish = true;
     gameList[socket.game].forEach(client => {
       if((socket.id != client.id) && (client.finish)) {
