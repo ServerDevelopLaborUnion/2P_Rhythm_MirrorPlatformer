@@ -89,12 +89,13 @@ namespace Main
 #region 룸
         private void RoomData(Packet p)
         {
-            RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
-
             switch(p.Type)
             {
                 case "create":
-                    actions.Enqueue(() => RoomManager.Instance.AddRoom(rp.Name, rp.Password) );
+                    actions.Enqueue(() => {
+                        RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
+                        RoomManager.Instance.AddRoom(rp.Name, rp.Password);
+                    });
                     break;
                 case "createRes":
                     actions.Enqueue(() => {
@@ -123,10 +124,13 @@ namespace Main
                     });
                     break;
                 case "init":
-                    actions.Enqueue(() => RoomManager.Instance.AddRoom(rp.Name, rp.Password) );
+                    actions.Enqueue(() => {
+                        RoomPacket rp = JsonConvert.DeserializeObject<RoomPacket>(p.Value);
+                        RoomManager.Instance.AddRoom(rp.Name, rp.Password);
+                        });
                     break;
                 case "roomDel":
-                    actions.Enqueue(() => RoomManager.Instance.RemoveRoom(rp.Name) );
+                    actions.Enqueue(() => RoomManager.Instance.RemoveRoom(p.Value) );
                     break;
                 case "err":
                     actions.Enqueue(() => TextSpawner.Instance.SpawnText(p.Value) );
