@@ -37,7 +37,7 @@ namespace Main
             if(Input.GetKeyUp(KeyCode.A) && isHold)
                 hold.StopHold();
 
-            if(Mathf.Abs(rb2d.velocity.y) > Mathf.Epsilon)
+            if(Mathf.Abs(rb2d.velocity.y) > 0)
             {
                 Client.MovePacket mp = new Client.MovePacket(transform.position.x, transform.position.y);
                 Client.Instance.SendMessages("game", "move", mp);
