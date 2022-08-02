@@ -30,9 +30,9 @@ public class DoText : MonoBehaviour
         int i = 0;
         string arr = TMP.text;
 
-        TMP.text = null;
+        TMP.text = "";
 
-        while(i < arr.Length - 3)
+        while(i < arr.Length)
         {
             if(arr[i] == '\\')
             {

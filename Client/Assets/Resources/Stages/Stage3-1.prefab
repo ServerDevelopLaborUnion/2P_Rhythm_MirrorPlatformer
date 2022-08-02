@@ -32284,7 +32284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f322da617fddf44cb3442641ec14bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dir: {x: -4, y: 0, z: 0}
+  dir: {x: -7, y: 0, z: 0}
 --- !u!1 &7350053026219675386
 GameObject:
   m_ObjectHideFlags: 0
