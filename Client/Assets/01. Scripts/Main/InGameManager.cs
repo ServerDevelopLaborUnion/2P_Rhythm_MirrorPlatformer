@@ -30,7 +30,7 @@ namespace Main
             LoadingPanel = canvas.Find("Panels/LoadingPanel").gameObject;
             WaitingPanel = canvas.Find("Panels/WaitingPanel").gameObject;
             ClearPanel = canvas.Find("Panels/ClearPanel").gameObject;
-            themeButton = canvas.Find("Bar/ThemeButton").GetComponent<Button>();
+            themeButton = canvas.Find("Panels/MainBar/ThemeButton").GetComponent<Button>();
             returnButton = ClearPanel.transform.Find("ReturnButton").gameObject;
         }
         private void Start()

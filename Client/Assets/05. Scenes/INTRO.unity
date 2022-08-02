@@ -2461,7 +2461,7 @@ MonoBehaviour:
   bgmSource: {fileID: 516581837}
   effectSource: {fileID: 1105612109}
   clipList:
-  - {fileID: 8300000, guid: 5fd5eba27cc551c4a9f7895af4e9e266, type: 3}
+  - {fileID: 8300000, guid: 97155d663e14e4647bec82a5a54b311f, type: 3}
 --- !u!1 &799347321
 GameObject:
   m_ObjectHideFlags: 0
