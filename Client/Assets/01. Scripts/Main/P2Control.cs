@@ -36,6 +36,11 @@ namespace Main
             ResEvent(Events.HoldD, () => hold.StopHold() );
         }
 
+        public void SetPosY(float value)
+        {
+            transform.position = new Vector3(transform.position.x, value);
+        }
+
         private void ResEvent(Events e, Action action)
         {
             if (events.HasFlag(e))

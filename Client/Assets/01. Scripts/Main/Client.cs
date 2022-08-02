@@ -45,6 +45,18 @@ namespace Main
             }
         }
 
+        public class MovePacket
+        {
+            [JsonProperty("x")] public float X;
+            [JsonProperty("y")] public float Y;
+
+            public MovePacket(float x, float y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
+
         public class RoomPacket
         {
             [JsonProperty("n")] public string Name;
@@ -156,6 +168,10 @@ namespace Main
             {
                 case "input":
                     actions.Enqueue(() => InputData(p));
+                    break;
+                case "move":
+                    MovePacket mp = JsonConvert.DeserializeObject<MovePacket>(p.Value);
+                    actions.Enqueue(() => P2Control.Instance.SetPosY(mp.Y) );
                     break;
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
