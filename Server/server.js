@@ -56,7 +56,7 @@ wss.on('connection', (client, req) => {
  */
 const GameData = function(data, socket) {
   if(socket.game == undefined) return;
-  if(data.t == 'input') {
+  if(data.t == 'move') {
     BroadCast(gameList[socket.game], false, socket, JSON.stringify(data));
   }
   else if(data.t == 'clear') {
