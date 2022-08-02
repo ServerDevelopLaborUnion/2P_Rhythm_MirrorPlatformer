@@ -38,7 +38,7 @@ namespace Main
 
             if(Mathf.Abs(rb2d.velocity.y) > Mathf.Epsilon)
             {
-                Client.MovePacket mp = new Client.MovePacket(transform.position.x, transform.position.y);
+                Client.MovePacket mp = new Client.MovePacket(transform.position.x, -transform.position.y);
                 string JSON = JsonConvert.SerializeObject(mp);
                 Client.Instance.SendMessages("game", "move", JSON);
             }
