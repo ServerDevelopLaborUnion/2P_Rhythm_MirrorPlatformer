@@ -1,6 +1,4 @@
-using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
+using Newtonsoft.Json;
 using Core;
 using UnityEngine;
 
@@ -41,7 +39,8 @@ namespace Main
             if(Mathf.Abs(rb2d.velocity.y) > Mathf.Epsilon)
             {
                 Client.MovePacket mp = new Client.MovePacket(transform.position.x, transform.position.y);
-                Client.Instance.SendMessages("game", "move", mp);
+                string JSON = JsonConvert.SerializeObject(mp);
+                Client.Instance.SendMessages("game", "move", JSON);
             }
 
             #region 

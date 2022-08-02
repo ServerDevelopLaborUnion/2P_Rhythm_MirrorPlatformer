@@ -170,7 +170,6 @@ namespace Main
                     actions.Enqueue(() => InputData(p));
                     break;
                 case "move":
-                    Debug.Log("P2 gonna be Setting postion");
                     MovePacket mp = JsonConvert.DeserializeObject<MovePacket>(p.Value);
                     actions.Enqueue(() => P2Control.Instance.SetPosY(mp.Y) );
                     break;
