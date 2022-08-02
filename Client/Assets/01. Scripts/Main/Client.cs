@@ -171,7 +171,10 @@ namespace Main
                 //     break;
                 case "move":
                     MovePacket mp = JsonConvert.DeserializeObject<MovePacket>(p.Value);
-                    actions.Enqueue(() => P2Control.Instance.SetPosY(mp.Y) );
+                    actions.Enqueue(() => {
+                        if(P2Control.Instance == null) return;
+                        P2Control.Instance.SetPosY(mp.Y); 
+                    });
                     break;
                 case "start":
                     actions.Enqueue(() => InGameManager.Instance.LoadStage(p.Value) );
