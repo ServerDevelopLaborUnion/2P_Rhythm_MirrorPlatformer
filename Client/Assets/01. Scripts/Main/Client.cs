@@ -166,9 +166,9 @@ namespace Main
         {
             switch (p.Type)
             {
-                case "input":
-                    actions.Enqueue(() => InputData(p));
-                    break;
+                // case "input":
+                //     actions.Enqueue(() => InputData(p));
+                //     break;
                 case "move":
                     MovePacket mp = JsonConvert.DeserializeObject<MovePacket>(p.Value);
                     actions.Enqueue(() => P2Control.Instance.SetPosY(mp.Y) );
@@ -194,24 +194,24 @@ namespace Main
             }
         }
 
-        private void InputData(Packet p)
-        {
-            switch (p.Value)
-            {
-                case "holdS":
-                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldS));
-                    break;
-                case "holdD":
-                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldD));
-                    break;
-                case "jump":
-                    actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.Jump));
-                    break;
-                case "error":
-                    actions.Enqueue(() => Debug.Log($"{p.Value}") );
-                    break;
-            }
-        }
+        // private void InputData(Packet p)
+        // {
+        //     switch (p.Value)
+        //     {
+        //         case "holdS":
+        //             actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldS));
+        //             break;
+        //         case "holdD":
+        //             actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.HoldD));
+        //             break;
+        //         case "jump":
+        //             actions.Enqueue(() => P2Control.Instance.ReqEvent(P2Control.Events.Jump));
+        //             break;
+        //         case "error":
+        //             actions.Enqueue(() => Debug.Log($"{p.Value}") );
+        //             break;
+        //     }
+        // }
 #endregion
         private void Update()
         {

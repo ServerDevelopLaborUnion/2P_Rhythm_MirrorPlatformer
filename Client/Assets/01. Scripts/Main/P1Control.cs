@@ -36,12 +36,9 @@ namespace Main
             if(Input.GetKeyUp(KeyCode.A) && isHold)
                 hold.StopHold();
 
-            // if(Mathf.Abs(rb2d.velocity.y) > Mathf.Epsilon)
-            // {
-                Client.MovePacket mp = new Client.MovePacket(transform.position.x, -transform.position.y);
-                string JSON = JsonConvert.SerializeObject(mp);
-                Client.Instance.SendMessages("game", "move", JSON);
-            // }
+            Client.MovePacket mp = new Client.MovePacket(transform.position.x, -transform.position.y);
+            string JSON = JsonConvert.SerializeObject(mp);
+            Client.Instance.SendMessages("game", "move", JSON);
 
             #region 
             // if (Input.GetKeyDown(KeyCode.Space) && isJump)
