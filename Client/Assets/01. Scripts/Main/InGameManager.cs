@@ -11,7 +11,6 @@ namespace Main
 
         private CinemachineVirtualCamera mainVCam = null;
         private Transform canvas = null;
-        private Button themeButton = null;
         public GameObject StagePanel { get; set; } = null;
         public GameObject LoadingPanel { get; set; } = null;
         public GameObject WaitingPanel { get; set; } = null;
@@ -29,12 +28,9 @@ namespace Main
             LoadingPanel = canvas.Find("Panels/LoadingPanel").gameObject;
             WaitingPanel = canvas.Find("Panels/WaitingPanel").gameObject;
             ClearPanel = canvas.Find("Panels/ClearPanel").gameObject;
-            themeButton = canvas.Find("Panels/MainBar/ThemeButton").GetComponent<Button>();
         }
         private void Start()
         {
-            themeButton.interactable = false;
-
             if(DataManager.Instance.ud.isHost)
                 LoadingPanel.SetActive(false);
 
@@ -73,8 +69,6 @@ namespace Main
 
         public void UnloadStage()
         {
-            themeButton.interactable = false;
-
             mainVCam.m_Lens.OrthographicSize = 7;
             
             AudioManager.Instance.PauseBGM();
@@ -89,7 +83,6 @@ namespace Main
 
         public void LoadStage(string index)
         {
-            themeButton.interactable = true;
             StagePanel.SetActive(false);
             LoadingPanel.SetActive(false);
 
