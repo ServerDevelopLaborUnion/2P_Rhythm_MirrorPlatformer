@@ -8,6 +8,7 @@ public class DoText : MonoBehaviour
 {
     [SerializeField] float moment = 0f, textDelay = 0.1f;
     [SerializeField] TextMeshProUGUI tmp = null;
+    private string arr = null;
 
     private void OnEnable()
     {
@@ -28,7 +29,7 @@ public class DoText : MonoBehaviour
     private IEnumerator DoTextCoroutine(TextMeshProUGUI TMP, float Delay = 0.1f)
     {
         int i = 0;
-        string arr = TMP.text;
+        arr = TMP.text;
 
         TMP.text = "";
 
@@ -54,5 +55,10 @@ public class DoText : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    private void OnDisable()
+    {
+        tmp.text = arr;
     }
 }
