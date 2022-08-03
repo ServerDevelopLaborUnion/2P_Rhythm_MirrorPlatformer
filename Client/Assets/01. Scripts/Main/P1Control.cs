@@ -27,6 +27,9 @@ namespace Main
         {
             Crash();
 
+            if(jump.IsGround())
+                hold.IsHolded = false;
+
             if (Input.GetKeyDown(KeyCode.Space) && isJump)
                 jump.DoJump();
             
@@ -60,10 +63,10 @@ namespace Main
 
         private void Crash()
         {
-            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, transform.localScale.x / 2 + 0.05f, groundLayer);
-            RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, transform.localScale.x / 2 + 0.05f, groundLayer);
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.localPosition, Vector2.right, transform.localScale.x / 2, groundLayer);
+            RaycastHit2D hitUp = Physics2D.Raycast(transform.localPosition, Vector2.up, transform.localScale.x / 2, groundLayer);
 
-            bool isCrash = Physics2D.OverlapCircle(transform.position, transform.localScale.x / 2 + 0.05f, obstacleLayer);
+            bool isCrash = Physics2D.OverlapBox(transform.localPosition, transform.localScale, obstacleLayer);
 
             if(hitRight || hitUp || isCrash)
                 Client.Instance.SendMessages("game", "dead", "");

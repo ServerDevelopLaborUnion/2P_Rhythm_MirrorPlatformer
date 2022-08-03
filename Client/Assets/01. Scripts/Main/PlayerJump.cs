@@ -29,7 +29,7 @@ namespace Main
             callBack?.Invoke();
         }
 
-        private bool IsGround()
+        public bool IsGround()
         {
             return Physics2D.OverlapBox(col2d.bounds.center, col2d.bounds.size, 0, groundLayer);
         }

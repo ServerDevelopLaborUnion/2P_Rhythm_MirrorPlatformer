@@ -9,7 +9,7 @@ namespace Main
         [SerializeField] float duration = 1f;
         private IEnumerator coroutine = null;
         private Rigidbody2D rb2d = null;
-
+        public bool IsHolded { get; set; } = false;
 
         private void Awake()
         {
@@ -18,6 +18,9 @@ namespace Main
 
         public void DoHold(Action callBack = null)
         {
+            if(IsHolded) return;
+
+            IsHolded = true;
             coroutine = Hold();
             callBack?.Invoke();
             StartCoroutine(coroutine);
