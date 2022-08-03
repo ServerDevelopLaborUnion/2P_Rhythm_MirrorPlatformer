@@ -5900,7 +5900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moment: 0
-  textDelay: 0.05
+  textDelay: 0.02
   tmp: {fileID: 1381848448}
 --- !u!1 &1250707274
 GameObject:
