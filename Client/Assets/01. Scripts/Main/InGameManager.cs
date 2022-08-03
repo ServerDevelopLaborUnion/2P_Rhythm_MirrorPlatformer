@@ -1,7 +1,6 @@
 using Core;
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.UI;
 
 namespace Main
 {
