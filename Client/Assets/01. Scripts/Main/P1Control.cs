@@ -8,6 +8,7 @@ namespace Main
     {
         [SerializeField] LayerMask groundLayer, obstacleLayer;
         [SerializeField] bool isJump = true, isHold = true;
+        private Collider2D col2d = null;
         private Rigidbody2D rb2d = null;
         private SpriteRenderer spR = null;
         private PlayerJump jump = null;
@@ -15,6 +16,7 @@ namespace Main
 
         private void Awake()
         {
+            col2d = GetComponent<Collider2D>();
             rb2d = GetComponent<Rigidbody2D>();
             jump = GetComponent<PlayerJump>();
             hold = GetComponent<PlayerHold>();
@@ -66,10 +68,19 @@ namespace Main
             RaycastHit2D hitRight = Physics2D.Raycast(transform.localPosition, Vector2.right, transform.localScale.x / 2, groundLayer);
             RaycastHit2D hitUp = Physics2D.Raycast(transform.localPosition, Vector2.up, transform.localScale.x / 2, groundLayer);
 
-            bool isCrash = Physics2D.OverlapBox(transform.localPosition, transform.localScale, obstacleLayer);
+            bool isCrash = Physics2D.OverlapBox(col2d.bounds.center, col2d.bounds.size, 0, obstacleLayer);
 
-            if(hitRight || hitUp || isCrash)
+            if(hitRight || hitUp)
+            {
+                Debug.Log("ground");
                 Client.Instance.SendMessages("game", "dead", "");
+            }
+
+            if(isCrash)
+            {
+                Debug.Log("Obstacle");
+                Client.Instance.SendMessages("game", "dead", "");
+            }
         }
     }
 }
