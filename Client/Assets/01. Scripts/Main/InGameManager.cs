@@ -47,6 +47,12 @@ namespace Main
                 return;
             }
 
+            if(Resources.Load<Stage>($"Stages/Stage{stageIndex}") == null)
+            {
+                TextSpawner.Instance.SpawnText("Stage Does Not Exist");
+                return;
+            }
+
             Client.Instance.SendMessages("game", "start", stageIndex);
         }
 

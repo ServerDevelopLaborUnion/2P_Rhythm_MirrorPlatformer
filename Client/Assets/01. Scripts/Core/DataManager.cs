@@ -19,22 +19,18 @@ namespace Core
             string sdJSON = PlayerPrefs.GetString("sdJSON", "");
             string udJSON = PlayerPrefs.GetString("udJSON", "");
 
-            if (sdJSON == "") { sd = new StageData() { unlockedStage = new List<string>(), }; sd.unlockedStage.Add("1-1"); }
-            else sd = JsonUtility.FromJson<StageData>(sdJSON);
-
-            if(udJSON == "") ud = new UserData() { isHost = false, skin = null, };
-            else ud = JsonUtility.FromJson<UserData>(udJSON);
-        }
-
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.E))
-            {
+            if (sdJSON == "") 
+            { 
+                sd = new StageData() { unlockedStage = new List<string>(), };
                 for(int i = 1; i < 6; i++)
                     for(int j = 1; j < 5; j++)
                         if(!sd.unlockedStage.Contains(i + "-" + j))
                             sd.unlockedStage.Add(i + "-" + j);
             }
+            else sd = JsonUtility.FromJson<StageData>(sdJSON);
+
+            if(udJSON == "") ud = new UserData() { isHost = false, skin = null, };
+            else ud = JsonUtility.FromJson<UserData>(udJSON);
         }
 
         private void SaveStageData()
