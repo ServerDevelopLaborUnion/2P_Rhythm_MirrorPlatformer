@@ -24,8 +24,11 @@ namespace Core
                 sd = new StageData() { unlockedStage = new List<string>(), };
                 for(int i = 1; i < 6; i++)
                     for(int j = 1; j < 5; j++)
+                    {
+                        if(i == 1 && j == 1) j = 5;
                         if(!sd.unlockedStage.Contains(i + "-" + j))
                             sd.unlockedStage.Add(i + "-" + j);
+                    }
             }
             else sd = JsonUtility.FromJson<StageData>(sdJSON);
 
@@ -46,7 +49,7 @@ namespace Core
             PlayerPrefs.SetString("udJSON", JSON);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             SaveStageData();
             SaveUserData();
